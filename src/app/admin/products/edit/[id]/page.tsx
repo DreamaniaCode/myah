@@ -1,4 +1,6 @@
 import { getProduct } from '@/app/actions';
+export const dynamic = 'force-dynamic';
+
 import { redirect } from 'next/navigation';
 import EditProductForm from './EditProductForm';
 

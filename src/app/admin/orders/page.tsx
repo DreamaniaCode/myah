@@ -1,4 +1,7 @@
 import { getOrders, updateOrderStatus } from '@/app/actions';
+
+export const dynamic = 'force-dynamic';
+
 import styles from '../styles.module.css';
 
 export default async function AdminOrdersPage() {

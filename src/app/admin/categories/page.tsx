@@ -1,4 +1,7 @@
 import { getCategories, createCategory, deleteCategory } from '@/app/actions/categories';
+
+export const dynamic = 'force-dynamic';
+
 import styles from '../styles.module.css';
 
 export default async function CategoriesPage() {

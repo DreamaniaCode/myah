@@ -1,4 +1,7 @@
 import { getSettings, updateSettings } from '@/app/actions/settings';
+
+export const dynamic = 'force-dynamic';
+
 import styles from '../styles.module.css';
 
 export default async function SettingsPage() {
