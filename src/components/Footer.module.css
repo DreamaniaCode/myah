@@ -18,6 +18,23 @@
     font-size: 1.25rem;
 }
 
+.logoContainer {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+    object-fit: contain;
+    background-color: white;
+    padding: 0.75rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+
 .column p {
     line-height: 1.6;
     color: #D1D5DB;

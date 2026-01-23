@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './Footer.module.css';
 
 interface FooterProps {
@@ -19,6 +20,16 @@ export default function Footer({
             <div className="container">
                 <div className={styles.grid}>
                     <div className={styles.column}>
+                        <div className={styles.logoContainer}>
+                            <Image 
+                                src="/images/logo.png" 
+                                alt={siteName}
+                                width={150}
+                                height={150}
+                                className={styles.logo}
+                                priority
+                            />
+                        </div>
                         <h3>{siteName}</h3>
                         <p>
                             نحيي تراث الأجداد بتقديم أجود أنواع العسل والأعشاب الطبيعية.
