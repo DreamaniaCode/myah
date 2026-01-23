@@ -1,26 +1,17 @@
-import Link from 'next/link';
+import { getSettings } from '@/app/actions/settings';
 import styles from './Hero.module.css';
 
-export default function Hero() {
-    return (
-        <section className={styles.hero}>
-            <div className={styles.blob1}></div>
-            <div className={styles.blob2}></div>
+export default async function Hero() {
+    const settings = await getSettings();
 
+    return (
+        <section className={styles.hero} style={{ backgroundImage: `url(${settings.heroImage})` }}>
             <div className={styles.content}>
-                <h1 className={styles.title}>
-                    اكتشف سر الطبيعة مع <span style={{ color: 'var(--primary-color)' }}>أعشاب MYAH</span>
-                </h1>
-                <p className={styles.subtitle}>
-                    نقدم لكم أجود أنواع العسل الطبيعي والأعشاب الطبية، مستخلصة من قلب الطبيعة لتعزيز صحتكم وجمالكم.
-                </p>
+                <h1 className={styles.title}>{settings.heroTitle}</h1>
+                <p className={styles.subtitle}>{settings.heroSubtitle}</p>
                 <div className={styles.actions}>
-                    <Link href="/products" className="btn btn-primary">
-                        تصفح المنتجات
-                    </Link>
-                    <Link href="/about" className="btn btn-secondary">
-                        اقرأ عنّا
-                    </Link>
+                    <a href="#products" className="btn btn-primary">تصفح المنتجات</a>
+                    <a href="/about" className="btn btn-secondary">اقرأ عنا</a>
                 </div>
             </div>
         </section>

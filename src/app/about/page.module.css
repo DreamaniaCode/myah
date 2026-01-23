@@ -1,0 +1,258 @@
+.container {
+    min-height: 100vh;
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #FFFBEB 0%, #ffffff 100%);
+}
+
+.hero {
+    text-align: center;
+    padding: 3rem 0 4rem;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #D97706 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    color: #6B7280;
+    font-weight: 500;
+}
+
+.section {
+    padding: 3rem 0;
+    animation: fadeInUp 0.8s ease-out backwards;
+}
+
+.section:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.section:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.section:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.sectionTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 1rem;
+}
+
+.sectionTitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #D97706 100%);
+    border-radius: 2px;
+}
+
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.text {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #4B5563;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.valuesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.valueCard {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.valueCard:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.valueCard:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.valueCard:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+.valueCard:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.valueCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.valueCard h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+}
+
+.valueCard p {
+    color: #6B7280;
+    line-height: 1.6;
+}
+
+.productsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.productCategory {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+}
+
+.productCategory:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-color);
+}
+
+.categoryIcon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+}
+
+.productCategory h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.productCategory p {
+    color: #6B7280;
+    line-height: 1.6;
+    font-size: 1.125rem;
+}
+
+.ctaSection {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #D97706 100%);
+    border-radius: 20px;
+    margin-top: 4rem;
+    color: white;
+    animation: fadeInUp 0.8s ease-out backwards;
+    animation-delay: 0.4s;
+}
+
+.ctaSection h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.ctaSection p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+.ctaButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: white;
+    color: var(--primary-color);
+    border-radius: 50px;
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ctaButton:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.125rem;
+    }
+
+    .sectionTitle {
+        font-size: 2rem;
+    }
+
+    .valuesGrid,
+    .productsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .ctaSection h2 {
+        font-size: 2rem;
+    }
+
+    .ctaSection p {
+        font-size: 1rem;
+    }
+}

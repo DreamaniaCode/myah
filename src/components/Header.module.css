@@ -1,58 +1,151 @@
 .header {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 0;
     z-index: 100;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--light-gray);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
 }
 
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 80px;
+    padding: 1.25rem 0;
+}
+
+.logoWrapper {
+    transition: transform 0.3s ease;
+}
+
+.logoWrapper:hover {
+    transform: scale(1.05);
 }
 
 .logo {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: 1.8rem;
+    font-weight: 800;
     color: var(--primary-color);
-    letter-spacing: -0.02em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: transform 0.3s;
+}
+
+.logo img {
+    height: 60px;
+    width: auto;
 }
 
 .links {
     display: flex;
-    gap: 2rem;
+    gap: 2.5rem;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .link {
-    font-weight: 500;
-    transition: color 0.2s;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.05rem;
+    position: relative;
+    padding: 0.5rem 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), #D97706);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 2px;
 }
 
 .link:hover {
     color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.link:hover::after {
+    width: 100%;
 }
 
 .cartBtn {
     position: relative;
-    font-size: 1.1rem;
-}
-
-.badge {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    background-color: var(--primary-color);
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), #D97706);
     color: white;
-    font-size: 0.75rem;
-    width: 20px;
-    height: 20px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.cartBtn:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+}
+
+.cartBtn:active {
+    transform: translateY(-1px) scale(1.05);
+}
+
+.badge {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background: #EF4444;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+    animation: bounceIn 0.5s ease-out;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 768px) {
+    .links {
+        gap: 1.5rem;
+    }
+
+    .link {
+        font-size: 0.95rem;
+    }
+
+    .cartBtn {
+        width: 45px;
+        height: 45px;
+    }
 }

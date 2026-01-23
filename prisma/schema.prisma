@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  price       Float
+  image       String
+  category    String
+  isNew       Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  customer    String
+  phone       String
+  address     String
+  total       Float
+  status      String   @default("pending") // pending, paid, shipped, cancelled
+  items       String   // JSON string of items
+  notes       String   @default("") // Admin notes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model SiteSettings {
+  id             Int    @id @default(1)
+  siteName       String @default("أعشاب MYAH")
+  logoUrl        String @default("/images/logo.png")
+  
+  heroTitle      String @default("طبيعة نقية، صحة مستدامة")
+  heroSubtitle   String @default("اكتشف مجموعتنا المختارة من العسل الحر والأعشاب الطبيعية")
+  heroImage      String @default("/images/hero_background_1769122439980.png")
+  
+  contactPhone   String @default("0600000000")
+  contactEmail   String @default("info@herbsmyah.com")
+  contactAddress String @default("الدار البيضاء، المغرب")
+  
+  bankName       String @default("CIH Bank")
+  bankAccount    String @default("1234567890123456")
+  cashPlusInfo   String @default("اسم المستفيد: محمد فلان | رقم الهاتف: 0600000000")
+  
+  updatedAt      DateTime @updatedAt
+}
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  nameAr      String   // Arabic name
+  icon        String   @default("📦") // Emoji icon
+  createdAt   DateTime @default(now())
+}

@@ -4,17 +4,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import styles from './Header.module.css';
+import { use } from 'react';
 
-export default function Header() {
+export default function Header({ settingsPromise }: { settingsPromise: Promise<any> }) {
     const { cartCount } = useCart();
+    const settings = use(settingsPromise);
 
     return (
         <header className={styles.header}>
             <div className={`container ${styles.nav}`}>
                 <Link href="/" className={styles.logoWrapper}>
                     <Image
-                        src="/images/logo.png"
-                        alt="Herbs MYAH"
+                        src={settings.logoUrl}
+                        alt={settings.siteName}
                         width={120}
                         height={60}
                         style={{ width: 'auto', height: '60px' }}
