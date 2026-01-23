@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 
 export default function CheckoutPage({ settings }: { settings: any }) {
-    const { cart, total, clearCart } = useCart();
+    const { items, cartTotal, clearCart } = useCart();
     const router = useRouter();
     const [submitted, setSubmitted] = useState(false);
 
@@ -18,8 +18,8 @@ export default function CheckoutPage({ settings }: { settings: any }) {
             customer: formData.get('name') as string,
             phone: formData.get('phone') as string,
             address: formData.get('address') as string,
-            total,
-            items: JSON.stringify(cart),
+            total: cartTotal,
+            items: JSON.stringify(items),
         };
 
         await fetch('/api/orders', {
@@ -70,7 +70,7 @@ export default function CheckoutPage({ settings }: { settings: any }) {
 
             <div className={styles.summary}>
                 <h2>ملخص الطلب</h2>
-                {cart.map((item) => (
+                {items.map((item) => (
                     <div key={item.id} className={styles.item}>
                         <span>{item.name}</span>
                         <span>{item.price} درهم</span>
@@ -78,7 +78,7 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                 ))}
                 <div className={styles.total}>
                     <strong>المجموع:</strong>
-                    <strong>{total} درهم</strong>
+                    <strong>{cartTotal} درهم</strong>
                 </div>
             </div>
 
