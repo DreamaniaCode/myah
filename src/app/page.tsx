@@ -1,4 +1,6 @@
 import Header from "@/components/Header";
+export const dynamic = 'force-dynamic';
+
 import Hero from "@/components/Hero";
 import ProductList from "@/components/ProductList";
 import Footer from "@/components/Footer";

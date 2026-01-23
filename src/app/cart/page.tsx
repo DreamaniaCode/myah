@@ -3,6 +3,9 @@ import Footer from '@/components/Footer';
 import CartPageClient from './CartPageClient';
 import { getSettings } from '@/app/actions/settings';
 
+export const dynamic = 'force-dynamic';
+
+
 export default async function CartPage() {
     const settingsPromise = getSettings();
     const settings = await settingsPromise;

@@ -3,6 +3,9 @@ import Footer from '@/components/Footer';
 import { getSettings } from '@/app/actions/settings';
 import styles from './page.module.css';
 
+export const dynamic = 'force-dynamic';
+
+
 export default async function AboutPage() {
     const settingsPromise = getSettings();
     const settings = await settingsPromise;

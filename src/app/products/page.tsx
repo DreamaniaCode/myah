@@ -4,6 +4,9 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductList from '@/components/ProductList';
 
+export const dynamic = 'force-dynamic';
+
+
 export default async function ProductsPage() {
     const prismaProducts = await getProducts();
     const settingsPromise = getSettings();

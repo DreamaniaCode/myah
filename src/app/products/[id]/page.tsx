@@ -3,6 +3,9 @@ import { getSettings } from '@/app/actions/settings';
 import { redirect } from 'next/navigation';
 import ProductDetailClient from './ProductDetailClient';
 
+export const dynamic = 'force-dynamic';
+
+
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const product = await getProduct(id);
