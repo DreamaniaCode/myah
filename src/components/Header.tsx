@@ -27,7 +27,9 @@ export default function Header({ settingsPromise }: { settingsPromise: Promise<a
                 <ul className={styles.links}>
                     <li><Link href="/" className={styles.link}>الرئيسية</Link></li>
                     <li><Link href="/products" className={styles.link}>المنتجات</Link></li>
+                    <li><Link href="/blog" className={styles.link}>المدونة</Link></li>
                     <li><Link href="/about" className={styles.link}>من نحن</Link></li>
+                    <li><Link href="/contact" className={styles.link}>اتصل بنا</Link></li>
                 </ul>
 
                 <Link href="/cart" className={styles.cartBtn} aria-label="Cart">
@@ -35,6 +37,6 @@ export default function Header({ settingsPromise }: { settingsPromise: Promise<a
                     {cartCount > 0 && <span className={styles.badge}>{cartCount}</span>}
                 </Link>
             </div>
-        </header>
+        </header >
     );
 }

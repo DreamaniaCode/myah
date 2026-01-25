@@ -27,7 +27,7 @@ export default async function Home() {
     <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header settingsPromise={settingsPromise} />
       <Hero />
-      <section className="container section-padding" style={{ flex: 1, width: '100%' }}>
+      <section id="products" className="container section-padding" style={{ flex: 1, width: '100%' }}>
         <h2 style={{ textAlign: 'center', marginBottom: '3rem', fontSize: '2.5rem', color: 'var(--text-color)' }}>
           منتجاتنا المميزة
         </h2>

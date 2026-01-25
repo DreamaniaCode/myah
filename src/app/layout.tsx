@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className={`${cairo.variable}`}>
         <CartProvider>
           {children}
+          <WhatsAppButton />
         </CartProvider>
       </body>
     </html>

@@ -9,9 +9,14 @@ export default function CheckoutPage({ settings }: { settings: any }) {
     const { items, cartTotal, clearCart } = useCart();
     const router = useRouter();
     const [submitted, setSubmitted] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoading(true);
+        setError(null);
+
         const formData = new FormData(e.currentTarget);
 
         const orderData = {
@@ -22,14 +27,30 @@ export default function CheckoutPage({ settings }: { settings: any }) {
             items: JSON.stringify(items),
         };
 
-        await fetch('/api/orders', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(orderData),
-        });
+        console.log('Submitting order:', orderData);
 
-        setSubmitted(true);
-        clearCart();
+        try {
+            const response = await fetch('/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orderData),
+            });
+
+            const result = await response.json();
+            console.log('Order response:', result);
+
+            if (!response.ok) {
+                throw new Error(result.error || 'فشل في إنشاء الطلب');
+            }
+
+            setSubmitted(true);
+            clearCart();
+        } catch (err) {
+            console.error('Order submission error:', err);
+            setError(err instanceof Error ? err.message : 'حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     if (submitted) {
@@ -85,23 +106,36 @@ export default function CheckoutPage({ settings }: { settings: any }) {
             <form onSubmit={handleSubmit} className={styles.form}>
                 <h2>معلومات التوصيل</h2>
 
+                {error && (
+                    <div style={{
+                        padding: '1rem',
+                        marginBottom: '1rem',
+                        backgroundColor: '#FEE2E2',
+                        color: '#991B1B',
+                        borderRadius: '8px',
+                        textAlign: 'center'
+                    }}>
+                        {error}
+                    </div>
+                )}
+
                 <div className={styles.field}>
                     <label htmlFor="name">الاسم الكامل</label>
-                    <input type="text" id="name" name="name" required />
+                    <input type="text" id="name" name="name" required disabled={loading} />
                 </div>
 
                 <div className={styles.field}>
                     <label htmlFor="phone">رقم الهاتف</label>
-                    <input type="tel" id="phone" name="phone" required />
+                    <input type="tel" id="phone" name="phone" required disabled={loading} />
                 </div>
 
                 <div className={styles.field}>
                     <label htmlFor="address">العنوان الكامل</label>
-                    <textarea id="address" name="address" rows={3} required />
+                    <textarea id="address" name="address" rows={3} required disabled={loading} />
                 </div>
 
-                <button type="submit" className={styles.submitBtn}>
-                    تأكيد الطلب
+                <button type="submit" className={styles.submitBtn} disabled={loading}>
+                    {loading ? 'جاري الإرسال...' : 'تأكيد الطلب'}
                 </button>
             </form>
         </div>
