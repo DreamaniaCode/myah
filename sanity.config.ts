@@ -25,7 +25,8 @@ export default defineConfig({
         productionUrl: async (prev, context) => {
             const { document } = context;
             if (document._type === 'blogPost') {
-                return `/blog/${document.slug?.current}`;
+                const slug = document.slug as { current: string } | undefined;
+                return `/blog/${slug?.current}`;
             }
             return prev;
         },

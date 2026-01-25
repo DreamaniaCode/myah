@@ -1,5 +1,5 @@
 import { createClient } from '@sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
+import createImageUrlBuilder from '@sanity/image-url';
 
 // TODO: Replace these with your actual Sanity project credentials
 // You can get these from https://www.sanity.io/manage
@@ -13,7 +13,7 @@ export const sanityConfig = {
 export const sanityClient = createClient(sanityConfig);
 
 // Helper function to generate image URLs
-const builder = imageUrlBuilder(sanityClient);
+const builder = createImageUrlBuilder(sanityClient);
 
 export function urlFor(source: any) {
     return builder.image(source);

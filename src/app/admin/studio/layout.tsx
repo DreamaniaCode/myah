@@ -13,3 +13,7 @@ export const viewport: Viewport = {
     maximumScale: 1,
     userScalable: false,
 };
+
+export default function StudioLayout({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+}
