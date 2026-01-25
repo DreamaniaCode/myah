@@ -14,13 +14,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  experimental: {
-    serverComponentsExternalPackages: ["@prisma/client"],
-    // @ts-expect-error - This is a valid Next.js config for Vercel tracing but might be missing from types
-    outputFileTracingIncludes: {
-      "/api/**/*": ["./dev.db", "./prisma/**/*"],
-      "/**/*": ["./dev.db", "./prisma/**/*"],
-    },
+  serverExternalPackages: ["@prisma/client"],
+  outputFileTracingIncludes: {
+    "/api/**/*": ["./dev.db", "./prisma/**/*"],
+    "/**/*": ["./dev.db", "./prisma/**/*"],
   },
 };
 
