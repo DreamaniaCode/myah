@@ -30,7 +30,7 @@ export default function ProductGallery({ mainImage, images, name }: ProductGalle
                     src={selectedImage}
                     alt={name}
                     fill
-                    style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'cover' }}
                     priority
                 />
             </div>

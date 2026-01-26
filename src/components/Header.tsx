@@ -45,7 +45,6 @@ export default function Header({ settingsPromise }: { settingsPromise: Promise<a
                     <button className={styles.closeBtn} onClick={closeMenu}>&times;</button>
                     <li><Link href="/" className={styles.link} onClick={closeMenu}>الرئيسية</Link></li>
                     <li><Link href="/products" className={styles.link} onClick={closeMenu}>المنتجات</Link></li>
-                    <li><Link href="/gallery" className={styles.link} onClick={closeMenu}>معرض الصور</Link></li>
                     <li><Link href="/blog" className={styles.link} onClick={closeMenu}>المدونة</Link></li>
                     <li><Link href="/about" className={styles.link} onClick={closeMenu}>من نحن</Link></li>
                     <li><Link href="/contact" className={styles.link} onClick={closeMenu}>اتصل بنا</Link></li>

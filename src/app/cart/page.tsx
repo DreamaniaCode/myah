@@ -11,15 +11,17 @@ export default async function CartPage() {
     const settings = await settingsPromise;
 
     return (
-        <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Header settingsPromise={settingsPromise} />
-            <CartPageClient />
+            <main className="container section-padding" style={{ flex: 1 }}>
+                <CartPageClient />
+            </main>
             <Footer
                 siteName={settings.siteName}
                 contactPhone={settings.contactPhone}
                 contactEmail={settings.contactEmail}
                 contactAddress={settings.contactAddress}
             />
-        </main>
+        </div>
     );
 }
