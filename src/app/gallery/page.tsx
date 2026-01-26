@@ -10,21 +10,39 @@ const images = [
     { src: '/images/argan_oil_1769122501146.png', alt: 'زيت أركان خام' },
 ];
 
-export default function GalleryPage() {
-    return (
-        <div className={styles.container} dir="rtl">
-            <h1 className={styles.title}>معرض الصور</h1>
-            <p className={styles.subtitle}>لمحات من منتجاتنا وطبيعة عملنا</p>
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import { getSettings } from "@/app/actions/settings";
 
-            <div className={styles.grid}>
-                {images.map((img, idx) => (
-                    <div key={idx} className={styles.card}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={img.src} alt={img.alt} className={styles.image} />
-                        <div className={styles.caption}>{img.alt}</div>
-                    </div>
-                ))}
+export default async function GalleryPage() {
+    const settingsPromise = getSettings();
+    const settings = await settingsPromise;
+
+    return (
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <Header settingsPromise={settingsPromise} />
+
+            <div className={styles.container} dir="rtl" style={{ flex: 1 }}>
+                <h1 className={styles.title}>معرض الصور</h1>
+                <p className={styles.subtitle}>لمحات من منتجاتنا وطبيعة عملنا</p>
+
+                <div className={styles.grid}>
+                    {images.map((img, idx) => (
+                        <div key={idx} className={styles.card}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={img.src} alt={img.alt} className={styles.image} />
+                            <div className={styles.caption}>{img.alt}</div>
+                        </div>
+                    ))}
+                </div>
             </div>
+
+            <Footer
+                siteName={settings.siteName}
+                contactPhone={settings.contactPhone}
+                contactEmail={settings.contactEmail}
+                contactAddress={settings.contactAddress}
+            />
         </div>
     );
 }
