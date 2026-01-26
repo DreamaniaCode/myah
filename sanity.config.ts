@@ -7,14 +7,16 @@ const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 
 if (!projectId) {
-    throw new Error('Missing NEXT_PUBLIC_SANITY_PROJECT_ID environment variable');
+    console.warn('Warning: Missing NEXT_PUBLIC_SANITY_PROJECT_ID environment variable. Sanity Studio may not work correctly.');
 }
+
+const safeProjectId = projectId || 'placeholder-id';
 
 export default defineConfig({
     name: 'herbs-myah-blog',
     title: 'Herbs MYAH Blog',
 
-    projectId,
+    projectId: safeProjectId,
     dataset,
 
     plugins: [deskTool(), visionTool()],

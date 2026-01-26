@@ -61,6 +61,18 @@ const portableTextComponents = {
     },
 };
 
+export async function generateStaticParams() {
+    try {
+        const posts = await sanityClient.fetch(`*[_type == "blogPost" && published == true]{ "slug": slug.current }`);
+        return posts.map((post: any) => ({
+            slug: post.slug,
+        }));
+    } catch (error) {
+        console.error('Error in generateStaticParams:', error);
+        return [];
+    }
+}
+
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const post = await getPost(slug);

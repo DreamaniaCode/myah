@@ -4,14 +4,14 @@ import createImageUrlBuilder from '@sanity/image-url';
 // TODO: Replace these with your actual Sanity project credentials
 // You can get these from https://www.sanity.io/manage
 export const sanityConfig = {
-    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+    projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'placeholder-id',
     dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
     apiVersion: '2024-01-25',
     useCdn: true,
 };
 
-if (!sanityConfig.projectId) {
-    throw new Error('Missing NEXT_PUBLIC_SANITY_PROJECT_ID environment variable');
+if (!process.env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    console.warn('Warning: Missing NEXT_PUBLIC_SANITY_PROJECT_ID environment variable. Sanity data fetching will fail.');
 }
 
 export const sanityClient = createClient(sanityConfig);
