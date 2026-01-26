@@ -29,6 +29,7 @@ model Order {
   address     String
   total       Float
   status      String   @default("pending") // pending, paid, shipped, cancelled
+  trackingCode String? // Tracking number for shipped orders
   items       String   // JSON string of items
   notes       String   @default("") // Admin notes
   createdAt   DateTime @default(now())

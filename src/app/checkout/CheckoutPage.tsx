@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
+import InvoiceDownload from '@/components/InvoiceDownload';
 
 export default function CheckoutPage({ settings }: { settings: any }) {
     const { items, cartTotal, clearCart } = useCart();
@@ -11,6 +12,7 @@ export default function CheckoutPage({ settings }: { settings: any }) {
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [orderData, setOrderData] = useState<any>(null); // Store order details for invoice
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -43,6 +45,18 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                 throw new Error(result.error || 'فشل في إنشاء الطلب');
             }
 
+            // Capture order data for the invoice
+            setOrderData({
+                id: result.orderId,
+                customer: formData.get('name') as string,
+                phone: formData.get('phone') as string,
+                address: formData.get('address') as string,
+                total: cartTotal,
+                items: items,
+                status: 'pending',
+                createdAt: new Date().toISOString(),
+            });
+
             setSubmitted(true);
             clearCart();
         } catch (err) {
@@ -53,13 +67,15 @@ export default function CheckoutPage({ settings }: { settings: any }) {
         }
     };
 
-    if (submitted) {
+    if (submitted && orderData) {
         return (
             <div className={styles.container}>
                 <div className={styles.success}>
                     <div className={styles.icon}>✅</div>
                     <h1>تم استلام طلبك بنجاح!</h1>
                     <p>شكراً لك على ثقتك. سنتواصل معك قريباً لتأكيد الطلب.</p>
+
+                    <InvoiceDownload order={orderData} settings={settings} />
 
                     <div className={styles.paymentInfo}>
                         <h2>معلومات الدفع</h2>

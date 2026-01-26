@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { getOrders, updateOrderStatus } from '@/app/actions';
 
 export const dynamic = 'force-dynamic';
@@ -56,7 +57,9 @@ export default async function AdminOrdersPage() {
                             return (
                                 <tr key={order.id}>
                                     <td style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
-                                        {order.id.slice(0, 8)}...
+                                        <Link href={`/admin/orders/${order.id}`} style={{ color: '#2563EB', textDecoration: 'underline' }}>
+                                            {order.id.slice(0, 8)}...
+                                        </Link>
                                     </td>
                                     <td>
                                         <div style={{ fontWeight: 600 }}>{order.customer}</div>

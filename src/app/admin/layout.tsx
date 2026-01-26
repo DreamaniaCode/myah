@@ -24,6 +24,9 @@ export default function AdminLayout({
                     <Link href="/admin/settings" className={styles.link}>
                         ⚙️ إعدادات الموقع
                     </Link>
+                    <Link href="/admin/studio" target="_blank" className={styles.link}>
+                        📝 إدارة المدونة
+                    </Link>
                     <hr style={{ border: '1px solid #374151', margin: '1rem 0' }} />
                     <Link href="/" target="_blank" className={styles.link}>
                         🌐 معاينة الموقع

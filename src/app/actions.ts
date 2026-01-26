@@ -56,10 +56,27 @@ export async function getOrders() {
     return await prisma.order.findMany({ orderBy: { createdAt: 'desc' } });
 }
 
+export async function getOrder(id: string) {
+    return await prisma.order.findUnique({ where: { id } });
+}
+
 export async function updateOrderStatus(id: string, status: string) {
     await prisma.order.update({
         where: { id },
         data: { status },
     });
     revalidatePath('/admin/orders');
+    revalidatePath(`/admin/orders/${id}`);
+}
+
+export async function updateOrderDetails(id: string, formData: FormData) {
+    const notes = formData.get('notes') as string;
+    const trackingCode = formData.get('trackingCode') as string;
+
+    await prisma.order.update({
+        where: { id },
+        data: { notes, trackingCode },
+    });
+
+    revalidatePath(`/admin/orders/${id}`);
 }
