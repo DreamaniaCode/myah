@@ -7,10 +7,21 @@ import { useState } from 'react';
 export default function LoginPage() {
     const [error, setError] = useState('');
 
+    const [loading, setLoading] = useState(false);
+
     async function handleSubmit(formData: FormData) {
-        const result = await login(formData);
-        if (result?.error) {
-            setError(result.error);
+        setLoading(true);
+        setError('');
+
+        try {
+            const result = await login(formData);
+            if (result?.error) {
+                setError(result.error);
+                setLoading(false);
+            }
+        } catch (err) {
+            setError('حدث خطأ غير متوقع');
+            setLoading(false);
         }
     }
 
@@ -24,7 +35,7 @@ export default function LoginPage() {
 
                 <form action={handleSubmit} className={styles.form}>
                     {error && (
-                        <div style={{ padding: '0.75rem', background: '#FEE2E2', color: '#991B1B', borderRadius: '6px', marginBottom: '1rem' }}>
+                        <div style={{ padding: '0.75rem', background: '#FEE2E2', color: '#991B1B', borderRadius: '6px', marginBottom: '1rem', textAlign: 'center' }}>
                             {error}
                         </div>
                     )}
@@ -38,6 +49,7 @@ export default function LoginPage() {
                             required
                             placeholder="admin"
                             autoComplete="username"
+                            disabled={loading}
                         />
                     </div>
 
@@ -50,11 +62,12 @@ export default function LoginPage() {
                             required
                             placeholder="••••••••"
                             autoComplete="current-password"
+                            disabled={loading}
                         />
                     </div>
 
-                    <button type="submit" className={styles.submitBtn}>
-                        تسجيل الدخول
+                    <button type="submit" className={styles.submitBtn} disabled={loading}>
+                        {loading ? 'جاري التحقق...' : 'تسجيل الدخول'}
                     </button>
                 </form>
 

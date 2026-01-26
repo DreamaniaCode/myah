@@ -1,7 +1,8 @@
 'use client';
 
 import { jsPDF } from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import html2canvas from 'html2canvas';
+import { useRef, useState } from 'react';
 import styles from './InvoiceDownload.module.css';
 
 interface InvoiceProps {
@@ -10,84 +11,115 @@ interface InvoiceProps {
 }
 
 export default function InvoiceDownload({ order, settings }: InvoiceProps) {
-    const generatePDF = () => {
-        const doc = new jsPDF();
-        const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
+    const invoiceRef = useRef<HTMLDivElement>(null);
+    const [isGenerating, setIsGenerating] = useState(false);
 
-        // Add Arabic font support (simulated for standard PDF, real Arabic requires custom fonts)
-        // For simplicity/compatibility in client-side generation without custom fonts:
-        // We will transliterate or use English labels where possible, or rely on device support.
-        // Note: jsPDF default fonts don't support Arabic well. 
-        // Ideally we would load a custom font, but for this MVP we'll structure it simply.
+    const generatePDF = async () => {
+        if (!invoiceRef.current) return;
+        setIsGenerating(true);
 
-        // Header
-        doc.setFontSize(22);
-        doc.setTextColor(44, 62, 80);
-        doc.text('INVOICE', 105, 20, { align: 'center' });
+        try {
+            const canvas = await html2canvas(invoiceRef.current, {
+                scale: 2, // Higher resolution
+                useCORS: true, // Allow loading images from external URLs
+                logging: false,
+            });
 
-        // Company Info
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text(settings.siteName || 'Herbs MYAH', 20, 40);
-        doc.text(settings.contactAddress || 'Casablanca, Morocco', 20, 45);
-        doc.text(settings.contactEmail || 'info@herbsmyah.com', 20, 50);
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-        // Order Info
-        doc.text(`Order ID: #${order.id.slice(0, 8)}`, 140, 40);
-        doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 140, 45);
-        doc.text(`Status: ${order.status.toUpperCase()}`, 140, 50);
-
-        // Customer Info
-        doc.setLineWidth(0.5);
-        doc.line(20, 60, 190, 60);
-        doc.setFontSize(12);
-        doc.setTextColor(0);
-        doc.text('Bill To:', 20, 70);
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text(order.customer, 20, 76);
-        doc.text(order.phone, 20, 81);
-        doc.text(order.address, 20, 86); // Note: Arabic address might show garbled without custom font
-
-        // Items Table
-        const tableColumn = ["Item", "Price (MAD)"];
-        const tableRows = items.map((item: any) => [
-            item.name, // CAUTION: Arabic names
-            item.price.toFixed(2)
-        ]);
-
-        autoTable(doc, {
-            startY: 95,
-            head: [tableColumn],
-            body: tableRows,
-            theme: 'striped',
-            headStyles: { fillColor: [6, 95, 70] },
-        });
-
-        // Total
-        const finalY = (doc as any).lastAutoTable.finalY + 10;
-        doc.setFontSize(14);
-        doc.setTextColor(0);
-        doc.text(`Total: ${order.total} MAD`, 140, finalY);
-
-        // Payment Info
-        doc.setFontSize(10);
-        doc.setTextColor(100);
-        doc.text('Payment Information:', 20, finalY + 20);
-        doc.text(`Bank: ${settings.bankName}`, 20, finalY + 26);
-        doc.text(`Account: ${settings.bankAccount}`, 20, finalY + 31);
-        doc.text(settings.cashPlusInfo, 20, finalY + 36);
-
-        // Footer
-        doc.setFontSize(8);
-        doc.text('Thank you for your business!', 105, 280, { align: 'center' });
-
-        doc.save(`Invoice-${order.id.slice(0, 8)}.pdf`);
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`Invoice-${order.id.slice(0, 8)}.pdf`);
+        } catch (err) {
+            console.error('PDF generation failed:', err);
+            alert('فشل إنشاء ملف PDF. يرجى المحاولة مرة أخرى.');
+        } finally {
+            setIsGenerating(false);
+        }
     };
 
+    const items = typeof order.items === 'string' ? JSON.parse(order.items) : order.items;
+    const paymentLabel = order.paymentMethod === 'bank_transfer' ? 'تحويل بنكي' : 'الدفع عند الاستلام';
+
     return (
-        <button onClick={generatePDF} className={styles.downloadBtn}>
-            📄 تحميل الفاتورة (Invoice)
-        </button>
+        <div>
+            <button onClick={generatePDF} className={styles.downloadBtn} disabled={isGenerating}>
+                {isGenerating ? 'جاري التحميل...' : '📄 تحميل الفاتورة (Invoice)'}
+            </button>
+
+            {/* Hidden Invoice Template - Visible only to html2canvas via absolute positioning off-screen */}
+            <div style={{ position: 'absolute', top: -9999, left: -9999 }}>
+                <div ref={invoiceRef} style={{
+                    width: '210mm',
+                    minHeight: '297mm',
+                    background: 'white',
+                    padding: '20mm',
+                    color: '#000',
+                    fontFamily: 'sans-serif',
+                    direction: 'rtl'
+                }}>
+                    {/* Header */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '2px solid #eee', paddingBottom: '1rem' }}>
+                        <div>
+                            {settings.logoUrl && (
+                                // eslint-disable-next-line @next/next/no-img-element
+                                <img src={settings.logoUrl} alt="Logo" style={{ height: '60px', objectFit: 'contain' }} />
+                            )}
+                            <h2 style={{ margin: '0.5rem 0 0', fontSize: '1.2rem', color: '#111' }}>{settings.siteName}</h2>
+                        </div>
+                        <div style={{ textAlign: 'left' }}>
+                            <h1 style={{ fontSize: '2rem', color: '#2c3e50', margin: 0 }}>فـاتـورة</h1>
+                            <p style={{ margin: 0, color: '#666' }}>#{order.id.slice(0, 8)}</p>
+                            <p style={{ margin: 0, color: '#666' }}>{new Date(order.createdAt).toLocaleDateString('ar-MA')}</p>
+                        </div>
+                    </div>
+
+                    {/* Info */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '3rem' }}>
+                        <div style={{ width: '45%' }}>
+                            <h3 style={{ borderBottom: '1px solid #ddd', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>بيانات العميل</h3>
+                            <p><strong>الاسم:</strong> {order.customer}</p>
+                            <p><strong>الهاتف:</strong> {order.phone}</p>
+                            <p><strong>العنوان:</strong> {order.address}</p>
+                        </div>
+                        <div style={{ width: '45%' }}>
+                            <h3 style={{ borderBottom: '1px solid #ddd', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>تفاصيل الدفع</h3>
+                            <p><strong>طريقة الدفع:</strong> {paymentLabel}</p>
+                            <p><strong>الحالة:</strong> {order.status === 'paid' ? 'مدفوع' : order.status === 'pending' ? 'قيد الانتظار' : order.status}</p>
+                        </div>
+                    </div>
+
+                    {/* Table */}
+                    <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '2rem' }}>
+                        <thead>
+                            <tr style={{ background: '#f3f4f6', color: '#374151' }}>
+                                <th style={{ padding: '0.75rem', textAlign: 'right', border: '1px solid #e5e7eb' }}>المنتج</th>
+                                <th style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #e5e7eb' }}>السعر</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {items.map((item: any, idx: number) => (
+                                <tr key={idx}>
+                                    <td style={{ padding: '0.75rem', border: '1px solid #e5e7eb' }}>{item.name}</td>
+                                    <td style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #e5e7eb' }}>{item.price} درهم</td>
+                                </tr>
+                            ))}
+                            <tr style={{ fontWeight: 'bold', background: '#f9fafb' }}>
+                                <td style={{ padding: '0.75rem', textAlign: 'right', border: '1px solid #e5e7eb' }}>المجموع</td>
+                                <td style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #e5e7eb', color: '#059669' }}>{order.total} درهم</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Footer */}
+                    <div style={{ marginTop: 'auto', paddingTop: '2rem', borderTop: '1px solid #eee', textAlign: 'center', fontSize: '0.9rem', color: '#666' }}>
+                        <p>{settings.contactAddress} | {settings.contactEmail} | {settings.contactPhone}</p>
+                        <p>شكراً لتعاملكم معنا!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

@@ -25,6 +25,7 @@ export default function CheckoutPage({ settings }: { settings: any }) {
             customer: formData.get('name') as string,
             phone: formData.get('phone') as string,
             address: formData.get('address') as string,
+            paymentMethod: formData.get('paymentMethod') as string,
             total: cartTotal,
             items: JSON.stringify(items),
         };
@@ -148,6 +149,20 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                 <div className={styles.field}>
                     <label htmlFor="address">العنوان الكامل</label>
                     <textarea id="address" name="address" rows={3} required disabled={loading} />
+                </div>
+
+                <div className={styles.field}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>طريقة الدفع</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer' }}>
+                            <input type="radio" name="paymentMethod" value="cod" defaultChecked />
+                            <span>💵 الدفع عند الاستلام (Cash on Delivery)</span>
+                        </label>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer' }}>
+                            <input type="radio" name="paymentMethod" value="bank_transfer" />
+                            <span>🏦 تحويل بنكي (Bank Transfer)</span>
+                        </label>
+                    </div>
                 </div>
 
                 <button type="submit" className={styles.submitBtn} disabled={loading}>

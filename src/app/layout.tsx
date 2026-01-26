@@ -11,8 +11,13 @@ const cairo = Cairo({
 });
 
 export const metadata: Metadata = {
-  title: "أعشاب MYAH - منتجات طبيعية وعسل",
-  description: "المتجر الرسمي لأعشاب MYAH - أجود أنواع العسل والمنتجات الطبيعية.",
+  title: "أعشاب MYAH - منتجات طبيعية 100%",
+  description: "متجر أعشاب MYAH للعسل الحر والمنتجات الطبيعية",
+  icons: {
+    icon: '/images/logo.png',
+    shortcut: '/images/logo.png',
+    apple: '/images/logo.png',
+  },
 };
 
 export default function RootLayout({

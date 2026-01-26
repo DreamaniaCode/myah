@@ -27,6 +27,7 @@ export async function POST(request: Request) {
                 phone: body.phone,
                 address: body.address,
                 total: parseFloat(body.total),
+                paymentMethod: body.paymentMethod || 'cod',
                 items: body.items,
             },
         });
