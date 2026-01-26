@@ -14,9 +14,9 @@ export const metadata: Metadata = {
   title: "أعشاب MYAH - منتجات طبيعية 100%",
   description: "متجر أعشاب MYAH للعسل الحر والمنتجات الطبيعية",
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/favicon.ico',
+    icon: '/herbs.png',
+    shortcut: '/herbs.png',
+    apple: '/herbs.png',
   },
 };
 
