@@ -1,0 +1,259 @@
+.splitLayout {
+    display: flex;
+    flex-direction: column-reverse;
+    /* Mobile: Form first, Summary last? Actually Shopify does Summary accordion then Form. For desktop: Row. */
+    min-height: 100vh;
+}
+
+@media (min-width: 1000px) {
+    .splitLayout {
+        flex-direction: row;
+    }
+}
+
+/* Left Column: Form */
+.formSection {
+    flex: 1;
+    padding: 2rem 5%;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+}
+
+.header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 1.8rem;
+    color: #1a4d2e;
+    margin-bottom: 1rem;
+}
+
+.breadcrumbs {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.breadcrumbs a {
+    color: #1a4d2e;
+    text-decoration: none;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.section h2 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.input {
+    width: 100%;
+    padding: 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #1a4d2e;
+    outline: none;
+    box-shadow: 0 0 0 1px #1a4d2e;
+}
+
+.field {
+    margin-bottom: 1rem;
+}
+
+/* Payment Options */
+.paymentNote {
+    background: #fffbeb;
+    color: #92400e;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    border: 1px solid #fcd34d;
+}
+
+.paymentOptions {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.paymentOption {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #d1d5db;
+    cursor: pointer;
+    background: #f9fafb;
+    transition: background 0.2s;
+}
+
+.paymentOption:last-child {
+    border-bottom: none;
+}
+
+.paymentSelected {
+    background: #f0fdf4;
+    /* Light green bg for selected */
+}
+
+.paymentOption input {
+    margin-left: 1rem;
+    width: 1.2rem;
+    height: 1.2rem;
+    accent-color: #1a4d2e;
+}
+
+.radioLabel {
+    display: flex;
+    flex-direction: column;
+}
+
+.radioLabel span {
+    font-weight: 500;
+    color: #374151;
+}
+
+.radioLabel small {
+    color: #6b7280;
+    margin-top: 0.2rem;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 1.2rem;
+    background: #1a4d2e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.2s;
+}
+
+.submitBtn:hover {
+    background: #14532d;
+}
+
+.submitBtn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+.backLink {
+    display: block;
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #1a4d2e;
+    text-decoration: none;
+}
+
+/* Right Column: Summary */
+.summarySection {
+    width: 100%;
+    background: #fafafa;
+    border-left: 1px solid #dee2e6;
+    padding: 2rem 5%;
+}
+
+@media (min-width: 1000px) {
+    .summarySection {
+        width: 45%;
+        min-height: 100vh;
+    }
+
+    .summaryContent {
+        position: sticky;
+        top: 2rem;
+    }
+}
+
+.summaryTitle {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #374151;
+}
+
+.itemList {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.itemImage {
+    position: relative;
+    width: 64px;
+    height: 64px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    margin-left: 1rem;
+}
+
+.itemImage img {
+    border-radius: 8px;
+}
+
+.badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #666;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 20px;
+    z-index: 1;
+}
+
+.itemInfo {
+    flex: 1;
+}
+
+.itemName {
+    font-weight: 500;
+    color: #374151;
+    display: block;
+}
+
+.itemPrice {
+    font-weight: 600;
+    color: #374151;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.totalPrice {
+    color: #1a4d2e;
+}

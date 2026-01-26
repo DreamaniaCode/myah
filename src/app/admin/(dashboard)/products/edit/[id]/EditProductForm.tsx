@@ -71,12 +71,22 @@ export default function EditProductForm({ product }: { product: any }) {
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>رابط الصورة (URL) أو مسار الملف (/images/...)</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>رابط الصورة الرئيسية</label>
                         <input
                             name="image"
                             defaultValue={product.image}
                             onChange={(e) => setImageUrl(e.target.value)}
                             required
+                            style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
+                        />
+                    </div>
+
+                    <div style={{ gridColumn: 'span 2' }}>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>صور إضافية (افصل بين الروابط بفاصلة ,)</label>
+                        <input
+                            name="images"
+                            defaultValue={product.images?.join(', ')}
+                            placeholder="/images/img1.png, /images/img2.png"
                             style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
                         />
                     </div>

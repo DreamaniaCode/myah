@@ -33,6 +33,38 @@ export default async function Home() {
         </h2>
         <ProductList products={products} />
       </section>
+
+      <section className="container section-padding" style={{ background: '#f9fafb' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2rem', marginBottom: '1.5rem', color: '#B45309' }}>فوائد العسل الطبيعي</h2>
+          <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#4B5563', marginBottom: '2rem' }}>
+            يعتبر العسل من أكثر الأغذية الطبيعية فائدة لصحة الإنسان. فهو يحتوي على مضادات الأكسدة التي تعزز مناعة الجسم،
+            كما يعمل كمضاد حيوي طبيعي. العسل الحر، مثل عسل السدر وعسل الكالبتوس، معروف بقدرته على تحسين الهضم،
+            تهدئة السعال، وتزويد الجسم بالطاقة الطبيعية دون التأثير السلبي للسكريات المصنعة.
+          </p>
+        </div>
+      </section>
+
+      <section className="container section-padding">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🌿</div>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#166534' }}>الأعشاب الطبيعية</h3>
+            <p style={{ lineHeight: '1.7', color: '#4B5563' }}>
+              نقدم لكم تشكيلة مختارة من الأعشاب المغربية الأصيلة. من خلطات التهدئة والاسترخاء إلى الأعشاب العلاجية.
+              جميع أعشابنا يتم تجفيفها بعناية للحفاظ على زيوتها العطرية وخصائصها العلاجية.
+            </p>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💧</div>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: '#B91C1C' }}>الزيوت الأساسية</h3>
+            <p style={{ lineHeight: '1.7', color: '#4B5563' }}>
+              اكتشف قوة الطبيعة مع زيوتنا المعصورة على البارد. زيت الأركان للتجميل، وزيوت المساج العلاجية.
+              منتجات خالية من الإضافات الكيميائية لضمان أقصى فائدة لبشرتك وشعرك.
+            </p>
+          </div>
+        </div>
+      </section>
       <Footer
         siteName={settings.siteName}
         contactPhone={settings.contactPhone}

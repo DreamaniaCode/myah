@@ -1,27 +1,42 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
-import styles from './page.module.css';
+import styles from './styles.module.css';
 import InvoiceDownload from '@/components/InvoiceDownload';
+import Image from 'next/image';
 
 export default function CheckoutPage({ settings }: { settings: any }) {
     const { items, cartTotal, clearCart } = useCart();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const router = useRouter();
+
+    // Form and submission states
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [error, setError] = useState<string | null>(null);
-    const [orderData, setOrderData] = useState<any>(null); // Store order details for invoice
+    const [orderData, setOrderData] = useState<any>(null);
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // Handle empty cart
+    if (!loading && !submitted && items.length === 0) {
+        return (
+            <div className="container section-padding" style={{ textAlign: 'center', marginTop: '4rem' }}>
+                <h2>سلة المشتريات فارغة</h2>
+                <a href="/products" className="btn-primary" style={{ marginTop: '1rem', display: 'inline-block' }}>تصفح المنتجات</a>
+            </div>
+        );
+    }
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         const formData = new FormData(e.currentTarget);
 
-        const orderData = {
+        const payload = {
             customer: formData.get('name') as string,
             phone: formData.get('phone') as string,
             address: formData.get('address') as string,
@@ -30,145 +45,173 @@ export default function CheckoutPage({ settings }: { settings: any }) {
             items: JSON.stringify(items),
         };
 
-        console.log('Submitting order:', orderData);
-
         try {
             const response = await fetch('/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(orderData),
+                body: JSON.stringify(payload),
             });
 
             const result = await response.json();
-            console.log('Order response:', result);
 
             if (!response.ok) {
                 throw new Error(result.error || 'فشل في إنشاء الطلب');
             }
 
-            // Capture order data for the invoice
+            // Success: Set order data for invoice and show success screen
             setOrderData({
                 id: result.orderId,
-                customer: formData.get('name') as string,
-                phone: formData.get('phone') as string,
-                address: formData.get('address') as string,
-                total: cartTotal,
+                customer: payload.customer,
+                phone: payload.phone,
+                address: payload.address,
+                total: payload.total,
                 items: items,
                 status: 'pending',
                 createdAt: new Date().toISOString(),
+                paymentMethod: payload.paymentMethod
             });
 
             setSubmitted(true);
             clearCart();
         } catch (err) {
             console.error('Order submission error:', err);
-            setError(err instanceof Error ? err.message : 'حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
+            setError(err instanceof Error ? err.message : 'حدث خطأ أثناء إرسال الطلب');
+            alert('حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى.');
         } finally {
             setLoading(false);
         }
     };
 
+    // Show Success Screen
     if (submitted && orderData) {
         return (
-            <div className={styles.container}>
-                <div className={styles.success}>
-                    <div className={styles.icon}>✅</div>
-                    <h1>تم استلام طلبك بنجاح!</h1>
-                    <p>شكراً لك على ثقتك. سنتواصل معك قريباً لتأكيد الطلب.</p>
+            <div className={styles.container} dir="rtl" style={{ textAlign: 'center', padding: '4rem 1rem' }}>
+                <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>✅</div>
+                <h1 style={{ marginBottom: '1rem', color: '#1a4d2e' }}>تم استلام طلبك بنجاح!</h1>
+                <p style={{ marginBottom: '2rem', color: '#666' }}>شكراً لك على ثقتك. سنتواصل معك قريباً لتأكيد الطلب.</p>
 
+                <div style={{ marginBottom: '2rem' }}>
                     <InvoiceDownload order={orderData} settings={settings} />
-
-                    <div className={styles.paymentInfo}>
-                        <h2>معلومات الدفع</h2>
-                        <div className={styles.method}>
-                            <h3>🏦 التحويل البنكي</h3>
-                            <p><strong>البنك:</strong> {settings.bankName}</p>
-                            <p><strong>رقم الحساب:</strong> {settings.bankAccount}</p>
-                        </div>
-                        <div className={styles.method}>
-                            <h3>💰 Cash Plus / Wafacash</h3>
-                            <p>{settings.cashPlusInfo}</p>
-                        </div>
-                        <p className={styles.note}>
-                            يرجى إرسال إثبات الدفع عبر الواتساب أو البريد الإلكتروني.
-                        </p>
-                    </div>
-
-                    <button onClick={() => router.push('/')} className={styles.homeBtn}>
-                        العودة للرئيسية
-                    </button>
                 </div>
+
+                <div className={styles.paymentInfo} style={{ border: '1px solid #e5e7eb', borderRadius: '12px', padding: '2rem', maxWidth: '600px', margin: '0 auto', background: '#f9fafb' }}>
+                    <h2 style={{ marginBottom: '1.5rem', borderBottom: '1px solid #dee2e6', paddingBottom: '0.5rem' }}>معلومات الدفع</h2>
+
+                    {orderData.paymentMethod === 'bank_transfer' ? (
+                        <div className={styles.method}>
+                            <h3 style={{ color: '#059669', marginBottom: '1rem' }}>🏦 التحويل البنكي</h3>
+                            <p style={{ marginBottom: '0.5rem' }}><strong>البنك:</strong> {settings.bankName || 'التجاري وفا بنك'}</p>
+                            <p style={{ fontWeight: 600, fontSize: '1.1rem' }}><strong>رقم الحساب:</strong> {settings.bankAccount || '1234 5678 9012 3456'}</p>
+                        </div>
+                    ) : (
+                        <div className={styles.method}>
+                            <h3 style={{ color: '#059669', marginBottom: '1rem' }}>💸 وكالات تحويل الأموال</h3>
+                            <p><strong>Cash Plus / Wafacash:</strong> {settings.cashPlusInfo || 'الاسم: محمد فلان - رقم الهاتف: 0600000000'}</p>
+                        </div>
+                    )}
+
+                    <p style={{ marginTop: '1.5rem', color: '#B45309', fontSize: '0.9rem', background: '#FFFBEB', padding: '0.75rem', borderRadius: '6px' }}>
+                        يرجى إرسال إثبات الدفع (صورة الوصل) عبر الواتساب لتجهيز شحنتك فوراً.
+                    </p>
+                </div>
+
+                <a href="/" className="btn-primary" style={{ marginTop: '3rem', display: 'inline-block' }}>العودة للرئيسية</a>
             </div>
         );
     }
 
+    // Main Layout (Split)
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>إتمام الطلب</h1>
-
-            <div className={styles.summary}>
-                <h2>ملخص الطلب</h2>
-                {items.map((item) => (
-                    <div key={item.id} className={styles.item}>
-                        <span>{item.name}</span>
-                        <span>{item.price} درهم</span>
-                    </div>
-                ))}
-                <div className={styles.total}>
-                    <strong>المجموع:</strong>
-                    <strong>{cartTotal} درهم</strong>
+        <div className={styles.splitLayout}>
+            {/* Left Column: Form */}
+            <div className={styles.formSection} dir="rtl">
+                <div className={styles.header}>
+                    <h1>أعشاب MYAH</h1>
+                    <nav aria-label="Breadcrumb">
+                        <ol className={styles.breadcrumbs}>
+                            <li><a href="/cart">سلة المشتريات</a></li>
+                            <li><span>›</span></li>
+                            <li><span aria-current="page">المعلومات والدفع</span></li>
+                        </ol>
+                    </nav>
                 </div>
+
+                <form onSubmit={handleSubmit} className={styles.form}>
+                    <section className={styles.section}>
+                        <h2>معلومات الاتصال</h2>
+                        <div className={styles.field}>
+                            <input type="text" name="name" placeholder="الاسم الكامل" required className={styles.input} />
+                        </div>
+                        <div className={styles.field}>
+                            <input type="tel" name="phone" placeholder="رقم الهاتف (للتواصل واتساب)" required className={styles.input} />
+                        </div>
+                    </section>
+
+                    <section className={styles.section}>
+                        <h2>عنوان التوصيل</h2>
+                        <div className={styles.field}>
+                            <textarea name="address" placeholder="العنوان والمدينة" rows={3} required className={styles.input} />
+                        </div>
+                    </section>
+
+                    <section className={styles.section}>
+                        <h2>طريقة الدفع</h2>
+                        <div className={styles.paymentNote}>
+                            ⚠️ <strong>تنبيه:</strong> الدفع مسبق لضمان جدية الطلب.
+                        </div>
+                        <div className={styles.paymentOptions}>
+                            <label className={`${styles.paymentOption} ${styles.paymentSelected}`}>
+                                <input type="radio" name="paymentMethod" value="bank_transfer" defaultChecked />
+                                <span className={styles.radioLabel}>
+                                    <span>🏦 تحويل بنكي (Bank Transfer)</span>
+                                    <small>سيتم إرسال رقم الحساب بعد تأكيد الطلب</small>
+                                </span>
+                            </label>
+                            <label className={styles.paymentOption}>
+                                <input type="radio" name="paymentMethod" value="cashplus" />
+                                <span className={styles.radioLabel}>
+                                    <span>💸 وكالات تحويل (CashPlus / Wafacash)</span>
+                                    <small>أسرع طريقة للدفع</small>
+                                </span>
+                            </label>
+                        </div>
+                    </section>
+
+                    <button type="submit" className={styles.submitBtn} disabled={loading}>
+                        {loading ? 'جاري المعالجة...' : `إتمام الطلب - ${cartTotal} درهم`}
+                    </button>
+
+                    <a href="/cart" className={styles.backLink}>‹ العودة للسلة</a>
+                </form>
             </div>
 
-            <form onSubmit={handleSubmit} className={styles.form}>
-                <h2>معلومات التوصيل</h2>
+            {/* Right Column: Order Summary (Sticky) */}
+            <div className={styles.summarySection} dir="rtl">
+                <div className={styles.summaryContent}>
+                    <h2 className={styles.summaryTitle}>ملخص الطلب</h2>
+                    <ul className={styles.itemList}>
+                        {items.map((item) => (
+                            <li key={item.id} className={styles.item}>
+                                <div className={styles.itemImage}>
+                                    <div className={styles.badge}>{item.quantity}</div>
+                                    <Image src={item.image} alt={item.name} width={64} height={64} style={{ objectFit: 'cover' }} />
+                                </div>
+                                <div className={styles.itemInfo}>
+                                    <span className={styles.itemName}>{item.name}</span>
+                                </div>
+                                <div className={styles.itemPrice}>
+                                    {(item.price * item.quantity).toFixed(2)} د.م
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
 
-                {error && (
-                    <div style={{
-                        padding: '1rem',
-                        marginBottom: '1rem',
-                        backgroundColor: '#FEE2E2',
-                        color: '#991B1B',
-                        borderRadius: '8px',
-                        textAlign: 'center'
-                    }}>
-                        {error}
-                    </div>
-                )}
-
-                <div className={styles.field}>
-                    <label htmlFor="name">الاسم الكامل</label>
-                    <input type="text" id="name" name="name" required disabled={loading} />
-                </div>
-
-                <div className={styles.field}>
-                    <label htmlFor="phone">رقم الهاتف</label>
-                    <input type="tel" id="phone" name="phone" required disabled={loading} />
-                </div>
-
-                <div className={styles.field}>
-                    <label htmlFor="address">العنوان الكامل</label>
-                    <textarea id="address" name="address" rows={3} required disabled={loading} />
-                </div>
-
-                <div className={styles.field}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>طريقة الدفع</label>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer' }}>
-                            <input type="radio" name="paymentMethod" value="cod" defaultChecked />
-                            <span>💵 الدفع عند الاستلام (Cash on Delivery)</span>
-                        </label>
-                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem', border: '1px solid #E5E7EB', borderRadius: '6px', cursor: 'pointer' }}>
-                            <input type="radio" name="paymentMethod" value="bank_transfer" />
-                            <span>🏦 تحويل بنكي (Bank Transfer)</span>
-                        </label>
+                    <div className={styles.totalRow}>
+                        <span>المجموع</span>
+                        <span className={styles.totalPrice}>{cartTotal} د.م</span>
                     </div>
                 </div>
-
-                <button type="submit" className={styles.submitBtn} disabled={loading}>
-                    {loading ? 'جاري الإرسال...' : 'تأكيد الطلب'}
-                </button>
-            </form>
+            </div>
         </div>
     );
 }

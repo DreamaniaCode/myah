@@ -20,8 +20,12 @@ export async function createProduct(formData: FormData) {
     const image = formData.get('image') as string;
     const isNew = formData.get('isNew') === 'on';
 
+    // Parse additional images from comma-separated string
+    const imagesStr = formData.get('images') as string;
+    const images = imagesStr ? imagesStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+
     await prisma.product.create({
-        data: { name, description, price, category, image, isNew },
+        data: { name, description, price, category, image, images, isNew },
     });
 
     revalidatePath('/admin/products');
@@ -36,9 +40,13 @@ export async function updateProduct(id: string, formData: FormData) {
     const image = formData.get('image') as string;
     const isNew = formData.get('isNew') === 'on';
 
+    // Parse additional images from comma-separated string
+    const imagesStr = formData.get('images') as string;
+    const images = imagesStr ? imagesStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+
     await prisma.product.update({
         where: { id },
-        data: { name, description, price, category, image, isNew },
+        data: { name, description, price, category, image, images, isNew },
     });
 
     revalidatePath('/admin/products');

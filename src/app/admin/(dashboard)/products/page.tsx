@@ -20,7 +20,8 @@ export default async function AdminProductsPage() {
                     <input name="name" placeholder="اسم المنتج" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
                     <input name="price" type="number" step="0.01" placeholder="السعر" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
                     <input name="category" placeholder="الفئة (honey, herbs, oils)" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
-                    <input name="image" placeholder="رابط الصورة (URL) أو مسار الملف (مثلاً: /images/file.png)" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
+                    <input name="image" placeholder="رابط الصورة الرئيسية" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
+                    <input name="images" placeholder="صور إضافية (مفصولة بفاصلة ,)" style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px', gridColumn: 'span 2' }} />
                     <textarea name="description" placeholder="الوصف" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px', gridColumn: 'span 2' }} />
                     <label style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <input type="checkbox" name="isNew" />
