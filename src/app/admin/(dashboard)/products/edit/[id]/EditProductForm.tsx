@@ -71,7 +71,7 @@ export default function EditProductForm({ product }: { product: any }) {
                     </div>
 
                     <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>رابط الصورة</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>رابط الصورة (URL) أو مسار الملف (/images/...)</label>
                         <input
                             name="image"
                             defaultValue={product.image}
