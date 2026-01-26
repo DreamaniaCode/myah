@@ -12,23 +12,9 @@ export default async function AdminProductsPage() {
         <div dir="rtl">
             <div className={styles.header}>
                 <h1 className={styles.title}>إدارة المنتجات</h1>
-            </div>
-
-            <div style={{ marginBottom: '2rem', padding: '1.5rem', background: 'white', borderRadius: '8px' }}>
-                <h3 style={{ marginBottom: '1rem' }}>➕ إضافة منتج جديد</h3>
-                <form action={createProduct} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                    <input name="name" placeholder="اسم المنتج" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
-                    <input name="price" type="number" step="0.01" placeholder="السعر" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
-                    <input name="category" placeholder="الفئة (honey, herbs, oils)" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
-                    <input name="image" placeholder="رابط الصورة الرئيسية" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }} />
-                    <input name="images" placeholder="صور إضافية (مفصولة بفاصلة ,)" style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px', gridColumn: 'span 2' }} />
-                    <textarea name="description" placeholder="الوصف" required style={{ padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px', gridColumn: 'span 2' }} />
-                    <label style={{ gridColumn: 'span 2', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <input type="checkbox" name="isNew" />
-                        <span>منتج جديد</span>
-                    </label>
-                    <button type="submit" className={`${styles.btn} ${styles.primary}`} style={{ gridColumn: 'span 2' }}>إضافة المنتج</button>
-                </form>
+                <Link href="/admin/products/add" className={`${styles.btn} ${styles.primary}`}>
+                    ➕ إضافة منتج جديد
+                </Link>
             </div>
 
             <div className={styles.tableContainer}>

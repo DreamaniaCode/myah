@@ -5,12 +5,12 @@ import styles from './ProductCard.module.css'; // Reusing card styles
 import { useState } from 'react';
 import CartConfirmationModal from './CartConfirmationModal';
 
-export default function AddToCartButton({ product }: { product: any }) {
+export default function AddToCartButton({ product, quantity = 1 }: { product: any, quantity?: number }) {
     const { addToCart } = useCart();
     const [showModal, setShowModal] = useState(false);
 
     const handleAddToCart = () => {
-        addToCart(product);
+        addToCart(product, quantity);
         setShowModal(true);
     };
 
