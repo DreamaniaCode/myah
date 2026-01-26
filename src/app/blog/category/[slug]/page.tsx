@@ -26,8 +26,9 @@ async function getPostsByCategory(slug: string): Promise<BlogPost[]> {
     }
 }
 
-export default async function CategoryPage({ params }: { params: { slug: string } }) {
-    const posts = await getPostsByCategory(params.slug);
+export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const posts = await getPostsByCategory(slug);
 
     if (posts.length === 0) {
         // Option: show empty state instead of 404 if category exists but has no posts
@@ -43,7 +44,7 @@ export default async function CategoryPage({ params }: { params: { slug: string 
     // or just display the slug for now, or fetch category details.
     // Let's rely on the posts for now.
 
-    const categoryName = posts.length > 0 ? (posts[0].category.nameAr || posts[0].category.name) : params.slug;
+    const categoryName = posts.length > 0 ? (posts[0].category.nameAr || posts[0].category.name) : slug;
 
     return (
         <div className={styles.container} dir="rtl">
