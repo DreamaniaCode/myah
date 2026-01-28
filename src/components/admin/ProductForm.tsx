@@ -63,59 +63,74 @@ export default function ProductForm({ action, initialData, submitLabel }: Produc
 
                     <div className={styles.formGroup} style={{ marginTop: '1rem' }}>
                         <label>صور إضافية (اختياري)</label>
-                        <div className={styles.formGroup}>
-                            <label>السعر (درهم)</label>
-                            <input
-                                name="price"
-                                type="number"
-                                step="0.01"
-                                defaultValue={initialData?.price}
-                                placeholder="0.00"
-                                required
-                                className={styles.input}
-                            />
-                        </div>
-                    </div>
-
-                    <div className={styles.card}>
-                        <h3 className={styles.cardTitle}>التنظيم</h3>
-
-                        <div className={styles.formGroup}>
-                            <label>الفئة</label>
-                            <select
-                                name="category"
-                                defaultValue={initialData?.category || ''}
-                                required
-                                className={styles.select}
-                            >
-                                <option value="" disabled>اختر فئة</option>
-                                <option value="honey">عسل (Honey)</option>
-                                <option value="herbs">أعشاب (Herbs)</option>
-                                <option value="oils">زيوت (Oils)</option>
-                                <option value="cosmetics">تجميل (Cosmetics)</option>
-                                <option value="other">أخرى</option>
-                            </select>
-                        </div>
-
-                        <div className={styles.checkboxGroup}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                                <input
-                                    type="checkbox"
-                                    name="isNew"
-                                    defaultChecked={initialData?.isNew}
-                                    style={{ width: '18px', height: '18px' }}
-                                />
-                                <span>منتج جديد</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div className={styles.card}>
-                        <button type="submit" className={styles.submitBtn}>
-                            {submitLabel}
-                        </button>
+                        <input
+                            name="images"
+                            defaultValue={initialData?.images?.join(',')}
+                            placeholder="رابط1, رابط2, رابط3"
+                            className={styles.input}
+                            dir="ltr"
+                        />
+                        <p style={{ fontSize: '0.8rem', color: '#6B7280', marginTop: '0.25rem' }}>افصل بين الروابط بفاصلة (,)</p>
                     </div>
                 </div>
+            </div>
+
+            <div className={styles.sideColumn}>
+                <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>التسعير</h3>
+                    <div className={styles.formGroup}>
+                        <label>السعر (درهم)</label>
+                        <input
+                            name="price"
+                            type="number"
+                            step="0.01"
+                            defaultValue={initialData?.price}
+                            placeholder="0.00"
+                            required
+                            className={styles.input}
+                        />
+                    </div>
+                </div>
+
+                <div className={styles.card}>
+                    <h3 className={styles.cardTitle}>التنظيم</h3>
+
+                    <div className={styles.formGroup}>
+                        <label>الفئة</label>
+                        <select
+                            name="category"
+                            defaultValue={initialData?.category || ''}
+                            required
+                            className={styles.select}
+                        >
+                            <option value="" disabled>اختر فئة</option>
+                            <option value="honey">عسل (Honey)</option>
+                            <option value="herbs">أعشاب (Herbs)</option>
+                            <option value="oils">زيوت (Oils)</option>
+                            <option value="cosmetics">تجميل (Cosmetics)</option>
+                            <option value="other">أخرى</option>
+                        </select>
+                    </div>
+
+                    <div className={styles.checkboxGroup}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                            <input
+                                type="checkbox"
+                                name="isNew"
+                                defaultChecked={initialData?.isNew}
+                                style={{ width: '18px', height: '18px' }}
+                            />
+                            <span>منتج جديد</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div className={styles.card}>
+                    <button type="submit" className={styles.submitBtn}>
+                        {submitLabel}
+                    </button>
+                </div>
+            </div>
         </form>
     );
 }
