@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { logout } from '@/app/actions/auth';
 import styles from './styles.module.css';
+import { Toaster } from 'react-hot-toast';
 
 export default function AdminLayout({
     children,
@@ -39,6 +40,7 @@ export default function AdminLayout({
                 </nav>
             </aside>
             <main className={styles.content}>
+                <Toaster position="top-center" />
                 {children}
             </main>
         </div>

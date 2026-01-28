@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import styles from './ProductForm.module.css';
 import ImageUpload from './ImageUpload';
+import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface ProductFormProps {
     action: (formData: FormData) => Promise<any>;
@@ -13,13 +15,33 @@ interface ProductFormProps {
 
 export default function ProductForm({ action, initialData, submitLabel }: ProductFormProps) {
     const [imagePreview, setImagePreview] = useState(initialData?.image || '');
+    const router = useRouter();
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+
+        // Append image from state if not present in input (though hidden input handles this, explicitly ensuring)
+        if (!formData.get('image')) {
+            formData.set('image', imagePreview);
+        }
+
+        try {
+            await action(formData);
+            toast.success('تمت إضافة المنتج بنجاح! 🚀');
+            router.push('/admin/products');
+        } catch (error) {
+            console.error(error);
+            toast.error('حدث خطأ أثناء إضافة المنتج 😢');
+        }
+    };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setImagePreview(e.target.value);
     };
 
     return (
-        <form action={action} className={styles.formGrid}>
+        <form onSubmit={handleSubmit} className={styles.formGrid}>
             <div className={styles.mainColumn}>
                 <div className={styles.card}>
                     <h3 className={styles.cardTitle}>معلومات المنتج</h3>

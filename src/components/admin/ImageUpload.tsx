@@ -25,6 +25,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                 onSuccess={handleUpload}
                 uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
                 options={{
+                    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, // Explicitly pass cloudName
                     maxFiles: 1,
                     resourceType: "image",
                     clientAllowedFormats: ["image"], // only allow images

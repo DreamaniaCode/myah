@@ -2,14 +2,30 @@
 
 import { useState } from 'react';
 import { getProduct, updateProduct } from '@/app/actions';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import styles from '../../../styles.module.css';
 import Image from 'next/image';
 import ImageUpload from '@/components/admin/ImageUpload';
+import { toast } from 'react-hot-toast';
 
 export default function EditProductForm({ product }: { product: any }) {
     const [imageUrl, setImageUrl] = useState(product.image);
+    const router = useRouter(); // Although not strictly needed for redirect if we stay on page, useful for refresh
     const handleUpdate = updateProduct.bind(null, product.id);
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+
+        try {
+            await handleUpdate(formData);
+            toast.success('تم تحديث المنتج بنجاح! ✅');
+            // Optional: router.refresh();
+        } catch (error) {
+            console.error(error);
+            toast.error('حدث خطأ أثناء التحديث ❌');
+        }
+    };
 
     return (
         <div dir="rtl">
@@ -18,7 +34,7 @@ export default function EditProductForm({ product }: { product: any }) {
             </div>
 
             <div style={{ background: 'white', padding: '2rem', borderRadius: '8px', maxWidth: '800px' }}>
-                <form action={handleUpdate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                     {/* Image Preview Section */}
                     <div style={{ gridColumn: 'span 2' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>صورة المنتج</label>
