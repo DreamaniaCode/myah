@@ -134,6 +134,63 @@ export default async function SettingsPage() {
                         </div>
                     </section>
 
+                    {/* SEO & Scripts */}
+                    <section>
+                        <h2 style={{ marginBottom: '1rem', color: '#1F2937' }}>🔍 تحسين محركات البحث (SEO)</h2>
+                        <div style={{ display: 'grid', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>عنوان الصفحة (Meta Title)</label>
+                                <input
+                                    name="metaTitle"
+                                    defaultValue={settings.metaTitle || "أعشاب MYAH"}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>وصف الصفحة (Meta Description)</label>
+                                <textarea
+                                    name="metaDescription"
+                                    defaultValue={settings.metaDescription || "متجر أعشاب طبيعية وزيوت أصلية وعسل حر في المغرب"}
+                                    rows={3}
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
+                                />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Scripts & Analytics */}
+                    <section>
+                        <h2 style={{ marginBottom: '1rem', color: '#1F2937' }}>📊 أكواد التتبع (Scripts)</h2>
+                        <div style={{ display: 'grid', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>أكواد الرأس (Head Scripts)</label>
+                                <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '0.5rem' }}>
+                                    مثل: Google Analytics, Facebook Pixel. سيتم وضعها داخل {`<head>`}.
+                                </p>
+                                <textarea
+                                    name="headScripts"
+                                    defaultValue={settings.headScripts || ""}
+                                    rows={5}
+                                    placeholder="<!-- Paste your scripts here -->"
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px', fontFamily: 'monospace', direction: 'ltr', textAlign: 'left' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>أكواد الجسم (Body Scripts)</label>
+                                <p style={{ fontSize: '0.8rem', color: '#6B7280', marginBottom: '0.5rem' }}>
+                                    سيتم وضعها في بداية {`<body>`}.
+                                </p>
+                                <textarea
+                                    name="bodyScripts"
+                                    defaultValue={settings.bodyScripts || ""}
+                                    rows={5}
+                                    placeholder="<!-- Paste your scripts here -->"
+                                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px', fontFamily: 'monospace', direction: 'ltr', textAlign: 'left' }}
+                                />
+                            </div>
+                        </div>
+                    </section>
+
                     <button
                         type="submit"
                         className={`${styles.btn} ${styles.primary}`}

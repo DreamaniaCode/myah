@@ -29,6 +29,10 @@ export async function updateSettings(formData: FormData) {
         bankName: formData.get('bankName') as string,
         bankAccount: formData.get('bankAccount') as string,
         cashPlusInfo: formData.get('cashPlusInfo') as string,
+        metaTitle: formData.get('metaTitle') as string,
+        metaDescription: formData.get('metaDescription') as string,
+        headScripts: formData.get('headScripts') as string,
+        bodyScripts: formData.get('bodyScripts') as string,
     };
 
     await prisma.siteSettings.upsert({

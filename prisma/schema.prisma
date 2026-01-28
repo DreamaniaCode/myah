@@ -62,6 +62,12 @@ model SiteSettings {
   bankAccount    String @default("1234567890123456")
   cashPlusInfo   String @default("اسم المستفيد: محمد فلان | رقم الهاتف: 0600000000")
   
+  // SEO & Scripts
+  metaTitle      String @default("أعشاب MYAH")
+  metaDescription String @default("متجر أعشاب طبيعية وزيوت أصلية وعسل حر في المغرب")
+  headScripts    String? // For Google Analytics, Facebook Pixel, etc. (in <head>)
+  bodyScripts    String? // For scripts that need to be in <body>
+  
   updatedAt      DateTime @updatedAt
 }
 

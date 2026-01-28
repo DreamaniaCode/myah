@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { Cairo } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { getSettings } from "@/app/actions/settings";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -10,24 +11,38 @@ const cairo = Cairo({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "أعشاب MYAH - منتجات طبيعية 100%",
-  description: "متجر أعشاب MYAH للعسل الحر والمنتجات الطبيعية",
-  icons: {
-    icon: '/herbs.png',
-    shortcut: '/herbs.png',
-    apple: '/herbs.png',
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
 
-export default function RootLayout({
+  return {
+    title: settings.metaTitle || "أعشاب MYAH - منتجات طبيعية 100%",
+    description: settings.metaDescription || "متجر أعشاب MYAH للعسل الحر والمنتجات الطبيعية",
+    icons: {
+      icon: '/herbs.png',
+      shortcut: '/herbs.png',
+      apple: '/herbs.png',
+    },
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSettings();
+
   return (
     <html lang="ar" dir="rtl">
+      <head>
+        {settings.headScripts && (
+          <div dangerouslySetInnerHTML={{ __html: settings.headScripts }} />
+        )}
+      </head>
       <body className={`${cairo.variable}`}>
+        {settings.bodyScripts && (
+          <div dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
+        )}
         <CartProvider>
           {children}
           <WhatsAppButton />
