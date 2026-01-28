@@ -5,6 +5,7 @@ import { getProduct, updateProduct } from '@/app/actions';
 import { redirect } from 'next/navigation';
 import styles from '../../../styles.module.css';
 import Image from 'next/image';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 export default function EditProductForm({ product }: { product: any }) {
     const [imageUrl, setImageUrl] = useState(product.image);
@@ -20,18 +21,13 @@ export default function EditProductForm({ product }: { product: any }) {
                 <form action={handleUpdate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                     {/* Image Preview Section */}
                     <div style={{ gridColumn: 'span 2' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>معاينة الصورة</label>
-                        {imageUrl && (
-                            <div style={{ position: 'relative', width: '200px', height: '200px', border: '2px solid #E5E7EB', borderRadius: '8px', overflow: 'hidden', marginBottom: '1rem' }}>
-                                <Image
-                                    src={imageUrl}
-                                    alt="Preview"
-                                    fill
-                                    style={{ objectFit: 'cover' }}
-                                    onError={() => setImageUrl('')}
-                                />
-                            </div>
-                        )}
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>صورة المنتج</label>
+                        <input type="hidden" name="image" value={imageUrl} />
+                        <ImageUpload
+                            value={imageUrl}
+                            onChange={(url) => setImageUrl(url)}
+                            onRemove={() => setImageUrl('')}
+                        />
                     </div>
 
                     <div>
@@ -70,16 +66,6 @@ export default function EditProductForm({ product }: { product: any }) {
                         </select>
                     </div>
 
-                    <div>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>رابط الصورة الرئيسية</label>
-                        <input
-                            name="image"
-                            defaultValue={product.image}
-                            onChange={(e) => setImageUrl(e.target.value)}
-                            required
-                            style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
-                        />
-                    </div>
 
                     <div style={{ gridColumn: 'span 2' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>صور إضافية (افصل بين الروابط بفاصلة ,)</label>
