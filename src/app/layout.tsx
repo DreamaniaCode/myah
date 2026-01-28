@@ -18,15 +18,12 @@ export async function generateMetadata(): Promise<Metadata> {
     title: settings.metaTitle || "أعشاب MYAH - منتجات طبيعية 100%",
     description: settings.metaDescription || "متجر أعشاب MYAH للعسل الحر والمنتجات الطبيعية",
     icons: {
-      icon: [
-        { url: '/herbs.png' },
-        { url: '/herbs.png', sizes: '32x32', type: 'image/png' },
-      ],
-      shortcut: '/herbs.png',
-      apple: '/herbs.png',
+      icon: '/images/logo.png',
+      shortcut: '/images/logo.png',
+      apple: '/images/logo.png',
       other: {
         rel: 'apple-touch-icon-precomposed',
-        url: '/herbs.png',
+        url: '/images/logo.png',
       },
     },
   };
