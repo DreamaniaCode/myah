@@ -18,6 +18,7 @@ export default function CheckoutPage({ settings }: { settings: any }) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [error, setError] = useState<string | null>(null);
     const [orderData, setOrderData] = useState<any>(null);
+    const [city, setCity] = useState('');
 
     // Handle empty cart
     if (!loading && !submitted && items.length === 0) {
@@ -40,6 +41,7 @@ export default function CheckoutPage({ settings }: { settings: any }) {
             customer: formData.get('name') as string,
             phone: formData.get('phone') as string,
             address: formData.get('address') as string,
+            city: formData.get('city') as string,
             paymentMethod: formData.get('paymentMethod') as string,
             total: cartTotal,
             items: JSON.stringify(items),
@@ -64,6 +66,7 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                 customer: payload.customer,
                 phone: payload.phone,
                 address: payload.address,
+                city: payload.city,
                 total: payload.total,
                 items: items,
                 status: 'pending',
@@ -102,6 +105,11 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                             <h3 style={{ color: '#059669', marginBottom: '1rem' }}>🏦 التحويل البنكي</h3>
                             <p style={{ marginBottom: '0.5rem' }}><strong>البنك:</strong> {settings.bankName || 'التجاري وفا بنك'}</p>
                             <p style={{ fontWeight: 600, fontSize: '1.1rem' }}><strong>رقم الحساب:</strong> {settings.bankAccount || '1234 5678 9012 3456'}</p>
+                        </div>
+                    ) : orderData.paymentMethod === 'cod' ? (
+                        <div className={styles.method}>
+                            <h3 style={{ color: '#059669', marginBottom: '1rem' }}>🚚 الدفع عند الاستلام</h3>
+                            <p>سيقوم موزعنا بتسليمك الطلب في مراكش، والدفع عند الاستلام.</p>
                         </div>
                     ) : (
                         <div className={styles.method}>
@@ -150,7 +158,18 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                     <section className={styles.section}>
                         <h2>عنوان التوصيل</h2>
                         <div className={styles.field}>
-                            <textarea name="address" placeholder="العنوان والمدينة" rows={3} required className={styles.input} />
+                            <input
+                                type="text"
+                                name="city"
+                                placeholder="المدينة"
+                                required
+                                className={styles.input}
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                            />
+                        </div>
+                        <div className={styles.field}>
+                            <textarea name="address" placeholder="العنوان بالتفصيل" rows={3} required className={styles.input} />
                         </div>
                     </section>
 
@@ -174,6 +193,15 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                                     <small>أسرع طريقة للدفع</small>
                                 </span>
                             </label>
+                            {(city.trim().toLowerCase() === 'marrakech' || city.trim() === 'مراكش') && (
+                                <label className={styles.paymentOption}>
+                                    <input type="radio" name="paymentMethod" value="cod" />
+                                    <span className={styles.radioLabel}>
+                                        <span>🚚 الدفع عند الاستلام (COD)</span>
+                                        <small>متاح حصرياً في مراكش</small>
+                                    </span>
+                                </label>
+                            )}
                         </div>
                     </section>
 
