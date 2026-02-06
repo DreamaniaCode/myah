@@ -7,7 +7,7 @@ export default function WhatsAppButton() {
     const [showPopup, setShowPopup] = useState(false);
 
     // TODO: Replace with actual WhatsApp number
-    const whatsappNumber = '+212600000000'; // Replace with your actual number
+    const whatsappNumber = '+212676953050'; // Replace with your actual number
     const message = 'السلام عليكم، أحتاج إلى مساعدة بخصوص منتجاتكم';
 
     const handleWhatsAppClick = () => {

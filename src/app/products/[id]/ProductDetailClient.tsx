@@ -38,7 +38,7 @@ export default function ProductDetailClient({ product, relatedProducts, whatsapp
 
     const handleWhatsAppOrder = () => {
         const message = `مرحباً، أريد طلب:\n${product.name}\nالكمية: ${quantity}\nالسعر: ${product.price * quantity} درهم`;
-        const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/212676953050?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     };
 
