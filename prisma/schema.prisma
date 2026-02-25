@@ -78,3 +78,26 @@ model Category {
   icon        String   @default("📦") // Emoji icon
   createdAt   DateTime @default(now())
 }
+
+model BlogCategory {
+  id          String   @id @default(uuid())
+  name        String
+  nameAr      String
+  slug        String   @unique
+  posts       BlogPost[]
+  createdAt   DateTime @default(now())
+}
+
+model BlogPost {
+  id            String   @id @default(uuid())
+  title         String
+  slug          String   @unique
+  excerpt       String?
+  content       String   @db.Text
+  featuredImage String?
+  published     Boolean  @default(true)
+  categoryId    String
+  category      BlogCategory @relation(fields: [categoryId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

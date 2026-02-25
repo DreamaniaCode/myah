@@ -1,5 +1,4 @@
-import { sanityClient, blogQueries } from '@/lib/sanity';
-import { PortableText } from '@portabletext/react';
+import { prisma } from '@/lib/prisma';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -7,64 +6,13 @@ import styles from './post.module.css';
 
 export const revalidate = 60;
 
-interface BlogPost {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    content: any;
-    excerpt: string;
-    featuredImage: string;
-    category: { name: string; nameAr: string; slug: { current: string } };
-    publishedAt: string;
-    relatedPosts: any[];
-}
-
-async function getPost(slug: string): Promise<BlogPost | null> {
-    try {
-        const post = await sanityClient.fetch(blogQueries.getPostBySlug(slug));
-        return post;
-    } catch (error) {
-        console.error('Error fetching blog post:', error);
-        return null;
-    }
-}
-
-// Portable Text components for custom rendering
-const portableTextComponents = {
-    types: {
-        image: ({ value }: any) => {
-            if (!value?.asset?._ref) {
-                return null;
-            }
-            return (
-                <div className={styles.contentImage}>
-                    <Image
-                        src={value.asset.url || ''}
-                        alt={value.alt || ' '}
-                        width={800}
-                        height={450}
-                        className={styles.image}
-                    />
-                </div>
-            );
-        },
-    },
-    marks: {
-        link: ({ children, value }: any) => {
-            const target = (value?.href || '').startsWith('http') ? '_blank' : undefined;
-            return (
-                <a href={value?.href} target={target} rel={target === '_blank' ? 'noopener noreferrer' : undefined}>
-                    {children}
-                </a>
-            );
-        },
-    },
-};
-
 export async function generateStaticParams() {
     try {
-        const posts = await sanityClient.fetch(`*[_type == "blogPost" && published == true]{ "slug": slug.current }`);
-        return posts.map((post: any) => ({
+        const posts = await prisma.blogPost.findMany({
+            where: { published: true },
+            select: { slug: true }
+        });
+        return posts.map((post) => ({
             slug: post.slug,
         }));
     } catch (error) {
@@ -75,11 +23,23 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const post = await getPost(slug);
+    const post = await prisma.blogPost.findUnique({
+        where: { slug: slug },
+        include: { category: true }
+    });
 
-    if (!post) {
+    if (!post || !post.published) {
         notFound();
     }
+
+    const relatedPosts = await prisma.blogPost.findMany({
+        where: {
+            categoryId: post.categoryId,
+            id: { not: post.id },
+            published: true
+        },
+        take: 3
+    });
 
     return (
         <div className={styles.container} dir="rtl">
@@ -89,14 +49,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                     <div className={styles.meta}>
                         {post.category && (
                             <Link
-                                href={`/blog/category/${post.category.slug.current}`}
+                                href={`/blog/category/${post.category.slug}`}
                                 className={styles.category}
                             >
                                 {post.category.nameAr || post.category.name}
                             </Link>
                         )}
-                        <time dateTime={post.publishedAt} className={styles.date}>
-                            {new Date(post.publishedAt).toLocaleDateString('ar-MA', {
+                        <time dateTime={post.createdAt.toISOString()} className={styles.date}>
+                            {post.createdAt.toLocaleDateString('ar-MA', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
@@ -106,7 +66,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
                     <h1 className={styles.title}>{post.title}</h1>
 
-                    {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
+                    {post.excerpt && (
+                        <div className={styles.excerpt}>{post.excerpt}</div>
+                    )}
                 </header>
 
                 {/* Featured Image */}
@@ -124,9 +86,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 )}
 
                 {/* Content */}
-                <div className={styles.content}>
-                    <PortableText value={post.content} components={portableTextComponents} />
-                </div>
+                <div
+                    className={styles.content}
+                    dangerouslySetInnerHTML={{ __html: post.content }}
+                />
 
                 {/* Back to blog */}
                 <div className={styles.backLink}>
@@ -135,33 +98,37 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </article>
 
             {/* Related Posts */}
-            {post.relatedPosts && post.relatedPosts.length > 0 && (
+            {relatedPosts && relatedPosts.length > 0 && (
                 <aside className={styles.related}>
                     <h2>مقالات ذات صلة</h2>
                     <div className={styles.relatedGrid}>
-                        {post.relatedPosts.map((related) => (
-                            <Link
-                                key={related._id}
-                                href={`/blog/${related.slug.current}`}
-                                className={styles.relatedCard}
-                            >
-                                {related.featuredImage && (
-                                    <div className={styles.relatedImage}>
-                                        <Image
-                                            src={related.featuredImage}
-                                            alt={related.title}
-                                            fill
-                                            className={styles.image}
-                                            sizes="(max-width: 768px) 100vw, 33vw"
-                                        />
+                        {relatedPosts.map((related) => {
+                            return (
+                                <Link
+                                    key={related.id}
+                                    href={`/blog/${related.slug}`}
+                                    className={styles.relatedCard}
+                                >
+                                    {related.featuredImage && (
+                                        <div className={styles.relatedImage}>
+                                            <Image
+                                                src={related.featuredImage}
+                                                alt={related.title}
+                                                fill
+                                                className={styles.image}
+                                                sizes="(max-width: 768px) 100vw, 33vw"
+                                            />
+                                        </div>
+                                    )}
+                                    <div className={styles.relatedContent}>
+                                        <h3>{related.title}</h3>
+                                        {related.excerpt && (
+                                            <p>{related.excerpt}</p>
+                                        )}
                                     </div>
-                                )}
-                                <div className={styles.relatedContent}>
-                                    <h3>{related.title}</h3>
-                                    {related.excerpt && <p>{related.excerpt}</p>}
-                                </div>
-                            </Link>
-                        ))}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </aside>
             )}

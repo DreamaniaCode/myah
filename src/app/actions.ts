@@ -88,3 +88,83 @@ export async function updateOrderDetails(id: string, formData: FormData) {
 
     revalidatePath(`/admin/orders/${id}`);
 }
+
+// Blog Category Actions
+export async function getBlogCategories() {
+    return await prisma.blogCategory.findMany({ orderBy: { createdAt: 'desc' } });
+}
+
+export async function createBlogCategory(formData: FormData) {
+    const name = formData.get('name') as string;
+    const nameAr = formData.get('nameAr') as string;
+    const slug = formData.get('slug') as string;
+
+    await prisma.blogCategory.create({
+        data: { name, nameAr, slug },
+    });
+
+    revalidatePath('/admin/blog');
+}
+
+export async function deleteBlogCategory(id: string) {
+    await prisma.blogCategory.delete({ where: { id } });
+    revalidatePath('/admin/blog');
+}
+
+// Blog Post Actions
+export async function getBlogPosts() {
+    return await prisma.blogPost.findMany({
+        include: { category: true },
+        orderBy: { createdAt: 'desc' }
+    });
+}
+
+export async function getBlogPost(id: string) {
+    return await prisma.blogPost.findUnique({
+        where: { id },
+        include: { category: true }
+    });
+}
+
+export async function createBlogPost(formData: FormData) {
+    const title = formData.get('title') as string;
+    const slug = formData.get('slug') as string;
+    const excerpt = formData.get('excerpt') as string;
+    const content = formData.get('content') as string;
+    const featuredImage = formData.get('featuredImage') as string;
+    const published = formData.get('published') === 'on';
+    const categoryId = formData.get('categoryId') as string;
+
+    await prisma.blogPost.create({
+        data: { title, slug, excerpt, content, featuredImage, published, categoryId },
+    });
+
+    revalidatePath('/admin/blog');
+    revalidatePath('/blog');
+}
+
+export async function updateBlogPost(id: string, formData: FormData) {
+    const title = formData.get('title') as string;
+    const slug = formData.get('slug') as string;
+    const excerpt = formData.get('excerpt') as string;
+    const content = formData.get('content') as string;
+    const featuredImage = formData.get('featuredImage') as string;
+    const published = formData.get('published') === 'on';
+    const categoryId = formData.get('categoryId') as string;
+
+    await prisma.blogPost.update({
+        where: { id },
+        data: { title, slug, excerpt, content, featuredImage, published, categoryId },
+    });
+
+    revalidatePath('/admin/blog');
+    revalidatePath('/blog');
+    revalidatePath(`/blog/${slug}`);
+}
+
+export async function deleteBlogPost(id: string) {
+    await prisma.blogPost.delete({ where: { id } });
+    revalidatePath('/admin/blog');
+    revalidatePath('/blog');
+}
+

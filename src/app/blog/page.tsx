@@ -1,32 +1,16 @@
-import { sanityClient, blogQueries } from '@/lib/sanity';
+import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './blog.module.css';
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
-interface BlogPost {
-    _id: string;
-    title: string;
-    slug: { current: string };
-    excerpt: string;
-    featuredImage: string;
-    category: { name: string; nameAr: string; slug: { current: string } };
-    publishedAt: string;
-}
-
-async function getBlogPosts(): Promise<BlogPost[]> {
-    try {
-        const posts = await sanityClient.fetch(blogQueries.getAllPosts);
-        return posts;
-    } catch (error) {
-        console.error('Error fetching blog posts:', error);
-        return [];
-    }
-}
-
 export default async function BlogPage() {
-    const posts = await getBlogPosts();
+    const posts = await prisma.blogPost.findMany({
+        where: { published: true },
+        include: { category: true },
+        orderBy: { createdAt: 'desc' }
+    });
 
     return (
         <div className={styles.container} dir="rtl">
@@ -37,14 +21,14 @@ export default async function BlogPage() {
 
             {posts.length === 0 ? (
                 <div className={styles.empty}>
-                    <p>لا توجد مقالات حالياً. تابعونا قريباً!</p>
+                    <p>لا توجد مقالات حالياً.</p>
                 </div>
             ) : (
                 <div className={styles.grid}>
                     {posts.map((post) => (
-                        <article key={post._id} className={styles.card}>
+                        <article key={post.id} className={styles.card}>
                             {post.featuredImage && (
-                                <Link href={`/blog/${post.slug.current}`}>
+                                <Link href={`/blog/${post.slug}`}>
                                     <div className={styles.imageWrapper}>
                                         <Image
                                             src={post.featuredImage}
@@ -60,7 +44,7 @@ export default async function BlogPage() {
                             <div className={styles.content}>
                                 {post.category && (
                                     <Link
-                                        href={`/blog/category/${post.category.slug.current}`}
+                                        href={`/blog/category/${post.category.slug}`}
                                         className={styles.category}
                                     >
                                         {post.category.nameAr || post.category.name}
@@ -68,25 +52,27 @@ export default async function BlogPage() {
                                 )}
 
                                 <h2 className={styles.cardTitle}>
-                                    <Link href={`/blog/${post.slug.current}`}>
+                                    <Link href={`/blog/${post.slug}`}>
                                         {post.title}
                                     </Link>
                                 </h2>
 
                                 {post.excerpt && (
-                                    <p className={styles.excerpt}>{post.excerpt}</p>
+                                    <p className={styles.excerpt}>
+                                        {post.excerpt}
+                                    </p>
                                 )}
 
                                 <div className={styles.meta}>
-                                    <time dateTime={post.publishedAt}>
-                                        {new Date(post.publishedAt).toLocaleDateString('ar-MA', {
+                                    <time dateTime={post.createdAt.toISOString()}>
+                                        {post.createdAt.toLocaleDateString('ar-MA', {
                                             year: 'numeric',
                                             month: 'long',
                                             day: 'numeric',
                                         })}
                                     </time>
                                     <Link
-                                        href={`/blog/${post.slug.current}`}
+                                        href={`/blog/${post.slug}`}
                                         className={styles.readMore}
                                     >
                                         اقرأ المزيد ←
