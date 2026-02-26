@@ -4,8 +4,10 @@ import { useState } from 'react';
 import QuantitySelector from './QuantitySelector';
 import AddToCartButton from './AddToCartButton';
 
+import { Product } from '@/types';
+
 interface ProductActionsProps {
-    product: Record<string, unknown>;
+    product: Product;
     price: number;
 }
 
