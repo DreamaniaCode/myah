@@ -1,5 +1,4 @@
-```typescript
-import { getOrder, updateOrderStatus, updateOrderTracking, updateOrderNotes } from '@/app/actions';
+import { getOrder, updateOrderStatus, updateOrderDetails } from '@/app/actions';
 export const dynamic = 'force-dynamic';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -112,7 +111,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                                         placeholder="أدخل رقم التتبع..."
                                     />
                                 </div>
-                                <button type="submit" className={`${ styles.btn } ${ styles.primary } `} style={{ width: '100%' }}>
+                                <button type="submit" className={`${styles.btn} ${styles.primary}`} style={{ width: '100%' }}>
                                     حفظ التغييرات
                                 </button>
                             </form>
@@ -140,17 +139,17 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 {order.status === 'pending' && (
                                     <form action={updateOrderStatus.bind(null, order.id, 'paid')}>
-                                        <button className={`${ styles.btn } ${ styles.primary } `} style={{ width: '100%' }}>✓ تأكيد الدفع</button>
+                                        <button className={`${styles.btn} ${styles.primary}`} style={{ width: '100%' }}>✓ تأكيد الدفع</button>
                                     </form>
                                 )}
                                 {order.status === 'paid' && (
                                     <form action={updateOrderStatus.bind(null, order.id, 'shipped')}>
-                                        <button className={`${ styles.btn } `} style={{ width: '100%', background: '#3B82F6', color: 'white' }}>📦 تم الشحن</button>
+                                        <button className={`${styles.btn}`} style={{ width: '100%', background: '#3B82F6', color: 'white' }}>📦 تم الشحن</button>
                                     </form>
                                 )}
                                 {(order.status === 'pending' || order.status === 'paid') && (
                                     <form action={updateOrderStatus.bind(null, order.id, 'cancelled')}>
-                                        <button className={`${ styles.btn } ${ styles.danger } `} style={{ width: '100%' }}>✕ إلغاء الطلب</button>
+                                        <button className={`${styles.btn} ${styles.danger}`} style={{ width: '100%' }}>✕ إلغاء الطلب</button>
                                     </form>
                                 )}
                             </div>
