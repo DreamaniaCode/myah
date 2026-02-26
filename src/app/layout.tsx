@@ -3,6 +3,7 @@ import { Cairo } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { getSettings } from "@/app/actions/settings";
+import SafeHydrate from "@/components/SafeHydrate";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -64,7 +65,9 @@ export default async function RootLayout({
       </head>
       <body className={`${cairo.variable}`} suppressHydrationWarning>
         {settings.bodyScripts && (
-          <div dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
+          <SafeHydrate>
+            <div dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
+          </SafeHydrate>
         )}
         <CartProvider>
           {children}

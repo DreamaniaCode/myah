@@ -1,9 +1,7 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Footer.module.css';
-import { useEffect, useState } from 'react';
+import SafeHydrate from './SafeHydrate';
 
 interface FooterProps {
     siteName?: string;
@@ -18,12 +16,6 @@ export default function Footer({
     contactEmail = '',
     contactAddress = ''
 }: FooterProps) {
-    const [year, setYear] = useState<number | string>('...');
-
-    useEffect(() => {
-        setYear(new Date().getFullYear());
-    }, []);
-
     return (
         <footer className={styles.footer}>
             <div className="container">
@@ -67,7 +59,7 @@ export default function Footer({
                 </div>
 
                 <div className={styles.bottom}>
-                    <p>© {year} {siteName}. جميع الحقوق محفوظة.</p>
+                    <p>© <SafeHydrate fallback="..."> {new Date().getFullYear()} </SafeHydrate> {siteName}. جميع الحقوق محفوظة.</p>
                 </div>
             </div>
         </footer>
