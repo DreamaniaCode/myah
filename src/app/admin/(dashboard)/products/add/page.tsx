@@ -2,6 +2,8 @@ import { createProduct } from '@/app/actions';
 import ProductForm from '@/components/admin/ProductForm';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default function AddProductPage() {
     return (
         <div dir="rtl">
