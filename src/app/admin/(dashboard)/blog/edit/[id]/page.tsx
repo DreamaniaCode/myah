@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { updateBlogPost, getBlogPost, getBlogCategories } from '@/app/actions';
 import BlogPostForm from '@/components/admin/BlogPostForm';
 import Link from 'next/link';

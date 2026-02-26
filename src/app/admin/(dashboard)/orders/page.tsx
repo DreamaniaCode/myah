@@ -1,4 +1,5 @@
 import Link from 'next/link';
+export const dynamic = 'force-dynamic';
 import { getOrders, updateOrderStatus } from '@/app/actions';
 
 export const dynamic = 'force-dynamic';

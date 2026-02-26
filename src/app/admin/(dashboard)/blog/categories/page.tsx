@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { createBlogCategory, deleteBlogCategory, getBlogCategories } from '@/app/actions';
 export const dynamic = 'force-dynamic';
 

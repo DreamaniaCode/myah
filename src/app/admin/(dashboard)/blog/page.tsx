@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { getBlogPosts, deleteBlogPost } from '@/app/actions';
 export const dynamic = 'force-dynamic';
 

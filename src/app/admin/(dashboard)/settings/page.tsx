@@ -1,6 +1,5 @@
-import { getSettings, updateSettings } from '@/app/actions/settings';
-
 export const dynamic = 'force-dynamic';
+import { getSettings, updateSettings } from '@/app/actions/settings';
 
 import styles from '../styles.module.css';
 

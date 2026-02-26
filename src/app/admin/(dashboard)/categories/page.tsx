@@ -1,6 +1,5 @@
-import { getCategories, createCategory, deleteCategory } from '@/app/actions/categories';
-
 export const dynamic = 'force-dynamic';
+import { getCategories, createCategory, deleteCategory } from '@/app/actions/categories';
 
 import styles from '../styles.module.css';
 
