@@ -55,7 +55,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                 {post.category.nameAr || post.category.name}
                             </Link>
                         )}
-                        <time dateTime={post.createdAt.toISOString()} className={styles.date}>
+                        <time dateTime={post.createdAt.toISOString()} className={styles.date} suppressHydrationWarning>
                             {post.createdAt.toLocaleDateString('ar-MA', {
                                 year: 'numeric',
                                 month: 'long',
@@ -123,7 +123,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                     <div className={styles.relatedContent}>
                                         <h3>{related.title}</h3>
                                         {related.excerpt && (
-                                            <p>{related.excerpt}</p>
+                                            <div className={styles.excerpt}>{related.excerpt}</div>
                                         )}
                                     </div>
                                 </Link>

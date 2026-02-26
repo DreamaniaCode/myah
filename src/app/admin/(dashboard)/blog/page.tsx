@@ -38,7 +38,7 @@ export default async function AdminBlogPage() {
                                 <td>{post.title}</td>
                                 <td>{post.category?.nameAr || post.category?.name || '-'}</td>
                                 <td>{post.published ? '✅ منشور' : '❌ مسودة'}</td>
-                                <td>{post.createdAt.toLocaleDateString('ar-MA')}</td>
+                                <td suppressHydrationWarning>{post.createdAt.toLocaleDateString('ar-MA')}</td>
                                 <td style={{ display: 'flex', gap: '0.5rem' }}>
                                     <Link href={`/admin/blog/edit/${post.id}`} className={`${styles.btn} ${styles.primary}`}>
                                         تعديل

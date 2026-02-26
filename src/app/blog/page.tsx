@@ -58,13 +58,13 @@ export default async function BlogPage() {
                                 </h2>
 
                                 {post.excerpt && (
-                                    <p className={styles.excerpt}>
+                                    <div className={styles.excerpt}>
                                         {post.excerpt}
-                                    </p>
+                                    </div>
                                 )}
 
                                 <div className={styles.meta}>
-                                    <time dateTime={post.createdAt.toISOString()}>
+                                    <time dateTime={post.createdAt.toISOString()} suppressHydrationWarning>
                                         {post.createdAt.toLocaleDateString('ar-MA', {
                                             year: 'numeric',
                                             month: 'long',

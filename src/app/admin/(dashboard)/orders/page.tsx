@@ -91,7 +91,7 @@ export default async function AdminOrdersPage() {
                                             {getStatusLabel(order.status)}
                                         </span>
                                     </td>
-                                    <td style={{ fontSize: '0.85rem', color: '#6B7280' }}>
+                                    <td style={{ fontSize: '0.85rem', color: '#6B7280' }} suppressHydrationWarning>
                                         {new Date(order.createdAt).toLocaleDateString('ar-MA')}
                                     </td>
                                     <td>

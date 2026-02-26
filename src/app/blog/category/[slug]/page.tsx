@@ -79,7 +79,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                                     )}
 
                                     <div className={styles.meta}>
-                                        <time dateTime={post.createdAt.toISOString()}>
+                                        <time dateTime={post.createdAt.toISOString()} suppressHydrationWarning>
                                             {post.createdAt.toLocaleDateString('ar-MA', {
                                                 year: 'numeric',
                                                 month: 'long',
