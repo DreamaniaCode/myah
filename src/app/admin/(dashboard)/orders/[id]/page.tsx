@@ -72,7 +72,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {items.map((item: any, idx: number) => (
+                                    {items.map((item: { name: string, price: number }, idx: number) => (
                                         <tr key={idx}>
                                             <td>{item.name}</td>
                                             <td>{item.price} درهم</td>

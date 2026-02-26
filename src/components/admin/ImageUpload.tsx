@@ -15,8 +15,11 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     value,
     onRemove
 }) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleUpload = useCallback((result: any) => {
-        onChange(result.info.secure_url);
+        if (result && result.info && typeof result.info === 'object' && 'secure_url' in result.info) {
+            onChange(result.info.secure_url as string);
+        }
     }, [onChange]);
 
     return (
@@ -32,7 +35,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                     sources: ["local", "url", "camera", "unsplash"],
                 }}
             >
-                {({ open }: { open: any }) => {
+                {({ open }: { open: () => void }) => {
                     return (
                         <div
                             onClick={() => open?.()}

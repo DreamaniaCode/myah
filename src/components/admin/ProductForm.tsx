@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import styles from './ProductForm.module.css';
 import ImageUpload from './ImageUpload';
 import { toast } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
 interface ProductFormProps {
-    action: (formData: FormData) => Promise<any>;
+    action: (formData: FormData) => Promise<unknown>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialData?: any;
     submitLabel: string;
 }
@@ -34,10 +34,6 @@ export default function ProductForm({ action, initialData, submitLabel }: Produc
             console.error(error);
             toast.error('حدث خطأ أثناء إضافة المنتج 😢');
         }
-    };
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setImagePreview(e.target.value);
     };
 
     return (

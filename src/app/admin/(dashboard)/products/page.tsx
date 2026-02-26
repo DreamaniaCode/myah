@@ -1,4 +1,4 @@
-import { getProducts, createProduct, deleteProduct } from '@/app/actions';
+import { getProducts, deleteProduct } from '@/app/actions';
 
 export const dynamic = 'force-dynamic';
 

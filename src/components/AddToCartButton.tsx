@@ -3,8 +3,9 @@
 import { useCart } from '@/context/CartContext';
 import styles from './ProductCard.module.css'; // Reusing card styles 
 import { useRouter } from 'next/navigation';
+import { Product } from '@/types';
 
-export default function AddToCartButton({ product, quantity = 1 }: { product: any, quantity?: number }) {
+export default function AddToCartButton({ product, quantity = 1 }: { product: Product, quantity?: number }) {
     const { addToCart } = useCart();
     const router = useRouter();
 

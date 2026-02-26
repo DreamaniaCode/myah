@@ -2,22 +2,19 @@
 
 import { useState, FormEvent } from 'react';
 import { useCart } from '@/context/CartContext';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import styles from './styles.module.css';
 import InvoiceDownload from '@/components/InvoiceDownload';
 import Image from 'next/image';
 
-export default function CheckoutPage({ settings }: { settings: any }) {
+export default function CheckoutPage({ settings }: { settings: Record<string, unknown> }) {
     const { items, cartTotal, clearCart } = useCart();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const router = useRouter();
 
     // Form and submission states
     const [submitted, setSubmitted] = useState(false);
     const [loading, setLoading] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [error, setError] = useState<string | null>(null);
-    const [orderData, setOrderData] = useState<any>(null);
+    const [orderData, setOrderData] = useState<Record<string, unknown> | null>(null);
     const [city, setCity] = useState('');
 
     // Handle empty cart
@@ -25,7 +22,8 @@ export default function CheckoutPage({ settings }: { settings: any }) {
         return (
             <div className="container section-padding" style={{ textAlign: 'center', marginTop: '4rem' }}>
                 <h2>سلة المشتريات فارغة</h2>
-                <a href="/products" className="btn-primary" style={{ marginTop: '1rem', display: 'inline-block' }}>تصفح المنتجات</a>
+                <Link href="/products" className="btn-primary" style={{ marginTop: '1rem', display: 'inline-block' }}>تصفح المنتجات</Link>
+
             </div>
         );
     }
@@ -103,8 +101,8 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                     {orderData.paymentMethod === 'bank_transfer' ? (
                         <div className={styles.method}>
                             <h3 style={{ color: '#059669', marginBottom: '1rem' }}>🏦 التحويل البنكي</h3>
-                            <p style={{ marginBottom: '0.5rem' }}><strong>البنك:</strong> {settings.bankName || 'التجاري وفا بنك'}</p>
-                            <p style={{ fontWeight: 600, fontSize: '1.1rem' }}><strong>رقم الحساب:</strong> {settings.bankAccount || '1234 5678 9012 3456'}</p>
+                            <p style={{ marginBottom: '0.5rem' }}><strong>البنك:</strong> {settings.bankName as string || 'التجاري وفا بنك'}</p>
+                            <p style={{ fontWeight: 600, fontSize: '1.1rem' }}><strong>رقم الحساب:</strong> {settings.bankAccount as string || '1234 5678 9012 3456'}</p>
                         </div>
                     ) : orderData.paymentMethod === 'cod' ? (
                         <div className={styles.method}>
@@ -114,16 +112,16 @@ export default function CheckoutPage({ settings }: { settings: any }) {
                     ) : (
                         <div className={styles.method}>
                             <h3 style={{ color: '#059669', marginBottom: '1rem' }}>💸 وكالات تحويل الأموال</h3>
-                            <p><strong>Cash Plus / Wafacash:</strong> {settings.cashPlusInfo || 'الاسم: محمد فلان - رقم الهاتف: 0600000000'}</p>
+                            <p><strong>Cash Plus / Wafacash:</strong> {settings.cashPlusInfo as string || 'الاسم: محمد فلان - رقم الهاتف: 0600000000'}</p>
                         </div>
                     )}
 
                     <p style={{ marginTop: '1.5rem', color: '#B45309', fontSize: '0.9rem', background: '#FFFBEB', padding: '0.75rem', borderRadius: '6px' }}>
                         يرجى إرسال إثبات الدفع (صورة الوصل) عبر الواتساب لتجهيز شحنتك فوراً.
                     </p>
-                </div>
+                </div>{error && <p style={{ color: 'red' }}>{error}</p>}
 
-                <a href="/" className="btn-primary" style={{ marginTop: '3rem', display: 'inline-block' }}>العودة للرئيسية</a>
+                <Link href="/" className="btn-primary" style={{ marginTop: '3rem', display: 'inline-block' }}>العودة للرئيسية</Link>
             </div>
         );
     }

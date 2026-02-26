@@ -68,7 +68,7 @@ export default async function AdminOrdersPage() {
                                     </td>
                                     <td>
                                         <div style={{ fontSize: '0.85rem' }}>
-                                            {items.map((item: any, idx: number) => (
+                                            {items.map((item: { name: string }, idx: number) => (
                                                 <div key={idx} style={{ marginBottom: '0.25rem' }}>
                                                     • {item.name}
                                                 </div>

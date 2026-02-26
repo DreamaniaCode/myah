@@ -7,7 +7,7 @@ interface RelatedProductsProps {
     category?: string;
 }
 
-export default async function RelatedProducts({ currentProductId, category }: RelatedProductsProps) {
+export default async function RelatedProducts({ currentProductId }: RelatedProductsProps) {
     // In a real app, we would filter by category in the database query
     const allProducts = await getProducts();
 
@@ -25,7 +25,7 @@ export default async function RelatedProducts({ currentProductId, category }: Re
         description: p.description,
         price: p.price,
         image: p.image,
-        category: p.category as any,
+        category: p.category as "honey" | "herbs" | "oils",
         isNew: p.isNew
     }));
 

@@ -4,7 +4,12 @@ import { jsPDF } from 'jspdf';
 import styles from './InvoiceDownload.module.css';
 
 interface TrackingProps {
-    order: any;
+    order: {
+        id: string;
+        customer: string;
+        address: string;
+        phone: string;
+    };
     trackingCode: string;
 }
 

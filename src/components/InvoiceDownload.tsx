@@ -6,7 +6,9 @@ import { useRef, useState } from 'react';
 import styles from './InvoiceDownload.module.css';
 
 interface InvoiceProps {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     order: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     settings: any;
 }
 
@@ -100,7 +102,7 @@ export default function InvoiceDownload({ order, settings }: InvoiceProps) {
                             </tr>
                         </thead>
                         <tbody>
-                            {items.map((item: any, idx: number) => (
+                            {items.map((item: { name: string; price: number }, idx: number) => (
                                 <tr key={idx}>
                                     <td style={{ padding: '0.75rem', border: '1px solid #e5e7eb' }}>{item.name}</td>
                                     <td style={{ padding: '0.75rem', textAlign: 'left', border: '1px solid #e5e7eb' }}>{item.price} درهم</td>

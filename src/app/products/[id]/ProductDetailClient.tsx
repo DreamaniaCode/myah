@@ -13,8 +13,7 @@ import styles from './page.module.css';
 interface ProductDetailClientProps {
     product: Product;
     relatedProducts: Product[];
-    whatsappNumber: string;
-    settingsPromise: Promise<any>;
+    settingsPromise: Promise<{ logoUrl: string; siteName: string;[key: string]: unknown }>;
     settings: {
         siteName: string;
         contactPhone: string;
@@ -23,7 +22,7 @@ interface ProductDetailClientProps {
     };
 }
 
-export default function ProductDetailClient({ product, relatedProducts, whatsappNumber, settingsPromise, settings }: ProductDetailClientProps) {
+export default function ProductDetailClient({ product, relatedProducts, settingsPromise, settings }: ProductDetailClientProps) {
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [isAdding, setIsAdding] = useState(false);

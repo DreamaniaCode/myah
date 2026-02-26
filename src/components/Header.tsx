@@ -6,7 +6,12 @@ import { useCart } from '@/context/CartContext';
 import styles from './Header.module.css';
 import { use, useState } from 'react';
 
-export default function Header({ settingsPromise }: { settingsPromise: Promise<any> }) {
+interface HeaderSettings {
+    logoUrl: string;
+    siteName: string;
+}
+
+export default function Header({ settingsPromise }: { settingsPromise: Promise<HeaderSettings> }) {
     const { cartCount } = useCart();
     const settings = use(settingsPromise);
 

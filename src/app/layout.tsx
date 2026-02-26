@@ -1,4 +1,4 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -40,12 +40,12 @@ export default async function RootLayout({
     <html lang="ar" dir="rtl">
       <head>
         {settings.headScripts && (
-          <div dangerouslySetInnerHTML={{ __html: settings.headScripts }} />
+          <script dangerouslySetInnerHTML={{ __html: settings.headScripts }} />
         )}
       </head>
       <body className={`${cairo.variable}`}>
         {settings.bodyScripts && (
-          <div dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
+          <script dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
         )}
         <CartProvider>
           {children}

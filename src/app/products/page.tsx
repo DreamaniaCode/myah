@@ -12,13 +12,14 @@ export default async function ProductsPage() {
     const settingsPromise = getSettings();
     const settings = await settingsPromise;
 
+    // Transform for Client Component (remove Dates)
     const products = prismaProducts.map(p => ({
         id: p.id,
         name: p.name,
         description: p.description,
         price: p.price,
         image: p.image,
-        category: p.category as any,
+        category: p.category as "honey" | "herbs" | "oils",
         isNew: p.isNew
     }));
 

@@ -5,7 +5,7 @@ import QuantitySelector from './QuantitySelector';
 import AddToCartButton from './AddToCartButton';
 
 interface ProductActionsProps {
-    product: any;
+    product: Record<string, unknown>;
     price: number;
 }
 

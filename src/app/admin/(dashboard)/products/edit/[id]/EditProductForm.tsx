@@ -1,16 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { getProduct, updateProduct } from '@/app/actions';
-import { redirect, useRouter } from 'next/navigation';
+import { updateProduct } from '@/app/actions';
 import styles from '../../../styles.module.css';
-import Image from 'next/image';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { toast } from 'react-hot-toast';
+import { Product } from '@/types';
 
-export default function EditProductForm({ product }: { product: any }) {
+export default function EditProductForm({ product }: { product: Product }) {
     const [imageUrl, setImageUrl] = useState(product.image);
-    const router = useRouter(); // Although not strictly needed for redirect if we stay on page, useful for refresh
     const handleUpdate = updateProduct.bind(null, product.id);
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {

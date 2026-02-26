@@ -19,7 +19,7 @@ export default async function Home() {
     description: p.description,
     price: p.price,
     image: p.image,
-    category: p.category as any,
+    category: p.category as "honey" | "herbs" | "oils",
     isNew: p.isNew
   }));
 

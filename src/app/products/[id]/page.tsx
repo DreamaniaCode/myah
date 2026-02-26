@@ -1,4 +1,4 @@
-import { getProduct, getProducts } from '@/app/actions';
+import { getProduct } from '@/app/actions';
 import { getSettings } from '@/app/actions/settings';
 import { notFound } from 'next/navigation';
 import ProductGallery from "@/components/ProductGallery";

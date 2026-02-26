@@ -19,7 +19,7 @@ export default function LoginPage() {
                 setError(result.error);
                 setLoading(false);
             }
-        } catch (err) {
+        } catch {
             setError('حدث خطأ غير متوقع');
             setLoading(false);
         }

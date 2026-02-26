@@ -8,8 +8,10 @@ import { useRouter } from 'next/navigation';
 import { Editor } from '@tinymce/tinymce-react';
 
 interface BlogPostFormProps {
-    action: (formData: FormData) => Promise<any>;
+    action: (formData: FormData) => Promise<unknown>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialData?: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     categories: any[];
     submitLabel: string;
 }

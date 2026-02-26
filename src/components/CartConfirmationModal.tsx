@@ -38,7 +38,7 @@ export default function CartConfirmationModal({ isOpen, onClose, productName }: 
                 <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
                 <h3 style={{ fontSize: '1.25rem', marginBottom: '0.5rem', fontWeight: 600 }}>تمت الإضافة بنجاح</h3>
                 <p style={{ color: '#666', marginBottom: '2rem' }}>
-                    تمت إضافة "{productName}" إلى سلة مشترياتك.
+                    تمت إضافة &quot;{productName}&quot; إلى سلة مشترياتك.
                 </p>
 
                 <div style={{ display: 'flex', gap: '1rem', flexDirection: 'column' }}>

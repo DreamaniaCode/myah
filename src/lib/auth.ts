@@ -28,7 +28,7 @@ export async function verifySession() {
     try {
         const verified = await jwtVerify(token, secret);
         return verified.payload.userId as string;
-    } catch (err) {
+    } catch {
         return null;
     }
 }
