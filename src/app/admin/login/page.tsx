@@ -13,14 +13,9 @@ export default function LoginPage() {
         setLoading(true);
         setError('');
 
-        try {
-            const result = await login(formData);
-            if (result?.error) {
-                setError(result.error);
-                setLoading(false);
-            }
-        } catch {
-            setError('حدث خطأ غير متوقع');
+        const result = await login(formData);
+        if (result?.error) {
+            setError(result.error);
             setLoading(false);
         }
     }
