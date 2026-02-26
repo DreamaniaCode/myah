@@ -2,7 +2,6 @@ export const dynamic = 'force-dynamic';
 import { getOrders, updateOrderStatus } from '@/app/actions';
 import Link from 'next/link';
 import styles from '../styles.module.css';
-import SafeHydrate from '@/components/SafeHydrate';
 
 export default async function AdminOrdersPage() {
     const orders = await getOrders();
@@ -90,10 +89,8 @@ export default async function AdminOrdersPage() {
                                             {getStatusLabel(order.status)}
                                         </span>
                                     </td>
-                                    <td style={{ fontSize: '0.85rem', color: '#6B7280' }}>
-                                        <SafeHydrate fallback="...">
-                                            {new Date(order.createdAt).toLocaleDateString('ar-MA')}
-                                        </SafeHydrate>
+                                    <td style={{ fontSize: '0.85rem', color: '#6B7280' }} suppressHydrationWarning>
+                                        {new Date(order.createdAt).toLocaleDateString('ar-MA')}
                                     </td>
                                     <td>
                                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>

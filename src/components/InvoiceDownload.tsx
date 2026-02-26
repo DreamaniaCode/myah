@@ -4,7 +4,6 @@ import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useRef, useState } from 'react';
 import styles from './InvoiceDownload.module.css';
-import SafeHydrate from './SafeHydrate';
 
 interface InvoiceProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -75,10 +74,8 @@ export default function InvoiceDownload({ order, settings }: InvoiceProps) {
                         <div style={{ textAlign: 'left' }}>
                             <h1 style={{ fontSize: '2rem', color: '#2c3e50', margin: 0 }}>فـاتـورة</h1>
                             <p style={{ margin: 0, color: '#666' }}>#{order.id.slice(0, 8)}</p>
-                            <p style={{ margin: 0, color: '#666' }}>
-                                <SafeHydrate fallback="...">
-                                    {new Date(order.createdAt).toLocaleDateString('ar-MA')}
-                                </SafeHydrate>
+                            <p style={{ margin: 0, color: '#666' }} suppressHydrationWarning>
+                                {new Date(order.createdAt).toLocaleDateString('ar-MA')}
                             </p>
                         </div>
                     </div>
@@ -122,7 +119,7 @@ export default function InvoiceDownload({ order, settings }: InvoiceProps) {
 
                     {/* Footer */}
                     <div style={{ marginTop: 'auto', paddingTop: '2rem', borderTop: '1px solid #eee', textAlign: 'center', fontSize: '0.9rem', color: '#666' }}>
-                        <p>© <SafeHydrate fallback="..."> {new Date().getFullYear()} </SafeHydrate> {settings.siteName as string || 'أعشاب MYAH'}. جميع الحقوق محفوظة.</p>
+                        <p suppressHydrationWarning>© {new Date().getFullYear()} {settings.siteName as string || 'أعشاب MYAH'}. جميع الحقوق محفوظة.</p>
                         <p>شكراً لتعاملكم معنا!</p>
                     </div>
                 </div>

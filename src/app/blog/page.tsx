@@ -2,7 +2,6 @@ import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './blog.module.css';
-import SafeHydrate from '@/components/SafeHydrate';
 
 export const revalidate = 60; // Revalidate every 60 seconds
 
@@ -65,15 +64,13 @@ export default async function BlogPage() {
                                 )}
 
                                 <div className={styles.meta}>
-                                    <SafeHydrate fallback={<span className={styles.date}>جاري التحميل...</span>}>
-                                        <time dateTime={post.createdAt.toISOString()}>
-                                            {post.createdAt.toLocaleDateString('ar-MA', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric',
-                                            })}
-                                        </time>
-                                    </SafeHydrate>
+                                    <time dateTime={post.createdAt.toISOString()} className={styles.date} suppressHydrationWarning>
+                                        {post.createdAt.toLocaleDateString('ar-MA', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        })}
+                                    </time>
                                     <Link
                                         href={`/blog/${post.slug}`}
                                         className={styles.readMore}

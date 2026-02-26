@@ -3,7 +3,7 @@ import { Cairo } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import { getSettings } from "@/app/actions/settings";
-import SafeHydrate from "@/components/SafeHydrate";
+import CustomScripts from "@/components/CustomScripts";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -39,40 +39,15 @@ export default async function RootLayout({
 
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
-      <head>
-        {settings.headScripts && (
-          <script
-            id="head-scripts"
-            dangerouslySetInnerHTML={{
-              __html: `(function() {
-                                var div = document.createElement('div');
-                                div.innerHTML = ${JSON.stringify(settings.headScripts)};
-                                while (div.firstChild) {
-                                    if (div.firstChild.tagName === 'SCRIPT') {
-                                        var s = document.createElement('script');
-                                        s.textContent = div.firstChild.textContent;
-                                        Array.from(div.firstChild.attributes).forEach(attr => s.setAttribute(attr.name, attr.value));
-                                        document.head.appendChild(s);
-                                    } else {
-                                        document.head.appendChild(div.firstChild);
-                                    }
-                                    div.removeChild(div.firstChild);
-                                }
-                            })()`
-            }}
-          />
-        )}
-      </head>
       <body className={`${cairo.variable}`} suppressHydrationWarning>
-        {settings.bodyScripts && (
-          <SafeHydrate>
-            <div dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
-          </SafeHydrate>
-        )}
         <CartProvider>
           {children}
           <WhatsAppButton />
         </CartProvider>
+        <CustomScripts
+          headScripts={settings.headScripts}
+          bodyScripts={settings.bodyScripts}
+        />
       </body>
     </html>
   );

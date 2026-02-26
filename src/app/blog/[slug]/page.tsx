@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import styles from './post.module.css';
-import SafeHydrate from '@/components/SafeHydrate';
 
 export const revalidate = 60;
 
@@ -56,15 +55,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                                 {post.category.nameAr || post.category.name}
                             </Link>
                         )}
-                        <SafeHydrate fallback={<span className={styles.date}>...</span>}>
-                            <time dateTime={post.createdAt.toISOString()} className={styles.date}>
-                                {post.createdAt.toLocaleDateString('ar-MA', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                })}
-                            </time>
-                        </SafeHydrate>
+                        <time dateTime={post.createdAt.toISOString()} className={styles.date} suppressHydrationWarning>
+                            {post.createdAt.toLocaleDateString('ar-MA', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                            })}
+                        </time>
                     </div>
 
                     <h1 className={styles.title}>{post.title}</h1>

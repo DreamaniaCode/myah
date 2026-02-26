@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Footer.module.css';
-import SafeHydrate from './SafeHydrate';
 
 interface FooterProps {
     siteName?: string;
@@ -59,7 +58,7 @@ export default function Footer({
                 </div>
 
                 <div className={styles.bottom}>
-                    <p>© <SafeHydrate fallback="..."> {new Date().getFullYear()} </SafeHydrate> {siteName}. جميع الحقوق محفوظة.</p>
+                    <p suppressHydrationWarning>© {new Date().getFullYear()} {siteName}. جميع الحقوق محفوظة.</p>
                 </div>
             </div>
         </footer>
