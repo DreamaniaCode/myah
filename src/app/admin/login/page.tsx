@@ -42,7 +42,7 @@ export default function LoginPage() {
                             id="username"
                             name="username"
                             required
-                            placeholder="admin"
+                            placeholder="اسم المستخدم"
                             autoComplete="username"
                             disabled={loading}
                         />
@@ -65,10 +65,6 @@ export default function LoginPage() {
                         {loading ? 'جاري التحقق...' : 'تسجيل الدخول'}
                     </button>
                 </form>
-
-                <p className={styles.hint}>
-                    المستخدم الافتراضي: <strong>admin</strong> / <strong>admin123</strong>
-                </p>
             </div>
         </div>
     );
