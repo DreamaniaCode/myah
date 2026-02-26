@@ -1,7 +1,5 @@
 export const dynamic = 'force-dynamic';
 import { createBlogCategory, deleteBlogCategory, getBlogCategories } from '@/app/actions';
-export const dynamic = 'force-dynamic';
-
 import Link from 'next/link';
 import styles from '../../styles.module.css';
 

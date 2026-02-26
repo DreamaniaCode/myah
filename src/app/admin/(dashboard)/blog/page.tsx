@@ -1,4 +1,3 @@
-```
 export const dynamic = 'force-dynamic';
 import { getBlogPosts, deleteBlogPost } from '@/app/actions';
 import Link from 'next/link';
@@ -12,10 +11,10 @@ export default async function AdminBlogPage() {
             <div className={styles.header}>
                 <h1 className={styles.title}>إدارة المدونة</h1>
                 <div style={{ display: 'flex', gap: '1rem' }}>
-                    <Link href="/admin/blog/categories" className={`${ styles.btn } ${ styles.secondary } `}>
+                    <Link href="/admin/blog/categories" className={`${styles.btn} ${styles.secondary}`}>
                         📁 إدارة التصنيفات
                     </Link>
-                    <Link href="/admin/blog/add" className={`${ styles.btn } ${ styles.primary } `}>
+                    <Link href="/admin/blog/add" className={`${styles.btn} ${styles.primary}`}>
                         ➕ إضافة مقال جديد
                     </Link>
                 </div>
@@ -40,11 +39,11 @@ export default async function AdminBlogPage() {
                                 <td>{post.published ? '✅ منشور' : '❌ مسودة'}</td>
                                 <td suppressHydrationWarning>{post.createdAt.toLocaleDateString('ar-MA')}</td>
                                 <td style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <Link href={`/ admin / blog / edit / ${ post.id } `} className={`${ styles.btn } ${ styles.primary } `}>
+                                    <Link href={`/admin/blog/edit/${post.id}`} className={`${styles.btn} ${styles.primary}`}>
                                         تعديل
                                     </Link>
                                     <form action={deleteBlogPost.bind(null, post.id)} style={{ display: 'inline' }}>
-                                        <button className={`${ styles.btn } ${ styles.danger } `}>حذف</button>
+                                        <button className={`${styles.btn} ${styles.danger}`}>حذف</button>
                                     </form>
                                 </td>
                             </tr>
