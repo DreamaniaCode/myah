@@ -22,13 +22,24 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         }
     }, [onChange]);
 
+    const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+    if (!cloudName || !uploadPreset) {
+        return (
+            <div style={{ padding: '1rem', border: '1px solid #FECACA', borderRadius: '8px', background: '#FEF2F2', color: '#991B1B', fontSize: '0.8rem' }}>
+                ⚠️ Cloudinary environment variables missing.
+            </div>
+        );
+    }
+
     return (
         <div>
             <CldUploadWidget
                 onSuccess={handleUpload}
-                uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                uploadPreset={uploadPreset}
                 options={{
-                    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, // Explicitly pass cloudName
+                    cloudName: cloudName,
                     maxFiles: 1,
                     resourceType: "image",
                     clientAllowedFormats: ["image"], // only allow images

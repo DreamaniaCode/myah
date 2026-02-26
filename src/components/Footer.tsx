@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Footer.module.css';
+import { useEffect, useState } from 'react';
 
 interface FooterProps {
     siteName?: string;
@@ -15,14 +16,20 @@ export default function Footer({
     contactEmail = '',
     contactAddress = ''
 }: FooterProps) {
+    const [year, setYear] = useState<number | string>('...');
+
+    useEffect(() => {
+        setYear(new Date().getFullYear());
+    }, []);
+
     return (
         <footer className={styles.footer}>
             <div className="container">
                 <div className={styles.grid}>
                     <div className={styles.column}>
                         <div className={styles.logoContainer}>
-                            <Image 
-                                src="/images/logo.png" 
+                            <Image
+                                src="/images/logo.png"
                                 alt={siteName}
                                 width={150}
                                 height={150}
@@ -58,7 +65,7 @@ export default function Footer({
                 </div>
 
                 <div className={styles.bottom}>
-                    <p>© {new Date().getFullYear()} {siteName}. جميع الحقوق محفوظة.</p>
+                    <p>© {year} {siteName}. جميع الحقوق محفوظة.</p>
                 </div>
             </div>
         </footer>

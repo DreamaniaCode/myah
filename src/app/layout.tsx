@@ -37,15 +37,34 @@ export default async function RootLayout({
   const settings = await getSettings();
 
   return (
-    <html lang="ar" dir="rtl">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
         {settings.headScripts && (
-          <script dangerouslySetInnerHTML={{ __html: settings.headScripts }} />
+          <script
+            id="head-scripts"
+            dangerouslySetInnerHTML={{
+              __html: `(function() {
+                                var div = document.createElement('div');
+                                div.innerHTML = ${JSON.stringify(settings.headScripts)};
+                                while (div.firstChild) {
+                                    if (div.firstChild.tagName === 'SCRIPT') {
+                                        var s = document.createElement('script');
+                                        s.textContent = div.firstChild.textContent;
+                                        Array.from(div.firstChild.attributes).forEach(attr => s.setAttribute(attr.name, attr.value));
+                                        document.head.appendChild(s);
+                                    } else {
+                                        document.head.appendChild(div.firstChild);
+                                    }
+                                    div.removeChild(div.firstChild);
+                                }
+                            })()`
+            }}
+          />
         )}
       </head>
-      <body className={`${cairo.variable}`}>
+      <body className={`${cairo.variable}`} suppressHydrationWarning>
         {settings.bodyScripts && (
-          <script dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
+          <div dangerouslySetInnerHTML={{ __html: settings.bodyScripts }} />
         )}
         <CartProvider>
           {children}
