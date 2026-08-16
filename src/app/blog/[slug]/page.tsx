@@ -8,42 +8,36 @@ import Footer from "@/components/Footer";
 import { getSettings } from "@/app/actions/settings";
 
 
-export const revalidate = 60;
-
-export async function generateStaticParams() {
-    try {
-        const posts = await prisma.blogPost.findMany({
-            where: { published: true },
-            select: { slug: true }
-        });
-        return posts.map((post) => ({
-            slug: post.slug,
-        }));
-    } catch (error) {
-        console.error('Error in generateStaticParams:', error);
-        return [];
-    }
-}
+export const dynamic = 'force-dynamic';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
-    const post = await prisma.blogPost.findUnique({
-        where: { slug: slug },
-        include: { category: true }
-    });
+    let post = null;
+    let relatedPosts: any[] = [];
+
+    try {
+        post = await prisma.blogPost.findUnique({
+            where: { slug: slug },
+            include: { category: true }
+        });
+
+        if (post && post.published) {
+            relatedPosts = await prisma.blogPost.findMany({
+                where: {
+                    categoryId: post.categoryId,
+                    id: { not: post.id },
+                    published: true
+                },
+                take: 3
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching blog post:', error);
+    }
 
     if (!post || !post.published) {
         notFound();
     }
-
-    const relatedPosts = await prisma.blogPost.findMany({
-        where: {
-            categoryId: post.categoryId,
-            id: { not: post.id },
-            published: true
-        },
-        take: 3
-    });
 
     const settingsPromise = getSettings();
     const settings = await settingsPromise;

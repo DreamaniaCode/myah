@@ -3,17 +3,42 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
+const defaultSettings = {
+    id: 1,
+    siteName: "أعشاب MYAH",
+    logoUrl: "/images/logo.png",
+    heroTitle: "طبيعة نقية، صحة مستدامة",
+    heroSubtitle: "اكتشف مجموعتنا المختارة من العسل الحر والأعشاب الطبيعية",
+    heroImage: "/images/hero_background_1769122439980.png",
+    contactPhone: "0600000000",
+    contactEmail: "info@herbsmyah.com",
+    contactAddress: "الدار البيضاء، المغرب",
+    bankName: "CIH Bank",
+    bankAccount: "1234567890123456",
+    cashPlusInfo: "اسم المستفيد: محمد فلان | رقم الهاتف: 0600000000",
+    metaTitle: "أعشاب MYAH",
+    metaDescription: "متجر أعشاب طبيعية وزيوت أصلية وعسل حر في المغرب",
+    headScripts: null,
+    bodyScripts: null,
+    updatedAt: new Date()
+};
+
 export async function getSettings() {
-    let settings = await prisma.siteSettings.findUnique({ where: { id: 1 } });
+    try {
+        let settings = await prisma.siteSettings.findUnique({ where: { id: 1 } });
 
-    if (!settings) {
-        // Create default settings if not exists
-        settings = await prisma.siteSettings.create({
-            data: { id: 1 }
-        });
+        if (!settings) {
+            // Create default settings if not exists
+            settings = await prisma.siteSettings.create({
+                data: { id: 1 }
+            });
+        }
+
+        return settings;
+    } catch (error) {
+        console.error('Error fetching settings:', error);
+        return defaultSettings;
     }
-
-    return settings;
 }
 
 export async function updateSettings(formData: FormData) {

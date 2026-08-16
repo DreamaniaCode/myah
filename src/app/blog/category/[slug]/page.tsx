@@ -8,21 +8,26 @@ import Footer from "@/components/Footer";
 import { getSettings } from "@/app/actions/settings";
 
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
+    let category = null;
 
-    // Fetch category by slug to get its ID and name
-    const category = await prisma.blogCategory.findUnique({
-        where: { slug: slug },
-        include: {
-            posts: {
-                where: { published: true },
-                orderBy: { createdAt: 'desc' }
+    try {
+        // Fetch category by slug to get its ID and name
+        category = await prisma.blogCategory.findUnique({
+            where: { slug: slug },
+            include: {
+                posts: {
+                    where: { published: true },
+                    orderBy: { createdAt: 'desc' }
+                }
             }
-        }
-    });
+        });
+    } catch (error) {
+        console.error('Error fetching blog category:', error);
+    }
 
     if (!category) {
         notFound();

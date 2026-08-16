@@ -5,11 +5,21 @@ import { revalidatePath } from 'next/cache';
 
 // Product Actions
 export async function getProducts() {
-    return await prisma.product.findMany({ orderBy: { createdAt: 'desc' } });
+    try {
+        return await prisma.product.findMany({ orderBy: { createdAt: 'desc' } });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return [];
+    }
 }
 
 export async function getProduct(id: string) {
-    return await prisma.product.findUnique({ where: { id } });
+    try {
+        return await prisma.product.findUnique({ where: { id } });
+    } catch (error) {
+        console.error('Error fetching product:', error);
+        return null;
+    }
 }
 
 export async function createProduct(formData: FormData) {

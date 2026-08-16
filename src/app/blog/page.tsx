@@ -7,14 +7,19 @@ import Footer from "@/components/Footer";
 import { getSettings } from "@/app/actions/settings";
 
 
-export const revalidate = 60; // Revalidate every 60 seconds
+export const dynamic = 'force-dynamic';
 
 export default async function BlogPage() {
-    const posts = await prisma.blogPost.findMany({
-        where: { published: true },
-        include: { category: true },
-        orderBy: { createdAt: 'desc' }
-    });
+    let posts = [];
+    try {
+        posts = await prisma.blogPost.findMany({
+            where: { published: true },
+            include: { category: true },
+            orderBy: { createdAt: 'desc' }
+        });
+    } catch (error) {
+        console.error('Error fetching blog posts:', error);
+    }
 
     const settingsPromise = getSettings();
     const settings = await settingsPromise;
