@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './blog.module.css';
@@ -6,11 +7,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getSettings } from "@/app/actions/settings";
 
+type BlogPostWithCategory = Prisma.BlogPostGetPayload<{ include: { category: true } }>;
 
 export const dynamic = 'force-dynamic';
 
 export default async function BlogPage() {
-    let posts = [];
+    let posts: BlogPostWithCategory[] = [];
     try {
         posts = await prisma.blogPost.findMany({
             where: { published: true },
