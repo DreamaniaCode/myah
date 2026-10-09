@@ -21,11 +21,15 @@ export async function POST(request: Request) {
             );
         }
 
+        const address = body.city && !body.address.includes(body.city)
+            ? `${body.address} - ${body.city}`
+            : body.address;
+
         const order = await prisma.order.create({
             data: {
                 customer: body.customer,
                 phone: body.phone,
-                address: body.address,
+                address: address,
                 total: parseFloat(body.total),
                 paymentMethod: body.paymentMethod || 'cod',
                 items: body.items,
