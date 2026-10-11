@@ -22,6 +22,7 @@ export default async function RelatedProducts({ currentProductId }: RelatedProdu
     const viewProducts = related.map(p => ({
         id: p.id,
         name: p.name,
+        slug: p.slug ?? undefined,
         description: p.description,
         price: p.price,
         image: p.image,

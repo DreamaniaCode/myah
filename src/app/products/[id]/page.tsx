@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { getProduct } from '@/app/actions';
 import { getSettings } from '@/app/actions/settings';
 import { notFound } from 'next/navigation';
@@ -10,6 +11,49 @@ import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params;
+    const product = await getProduct(id);
+
+    if (!product) {
+        return {
+            title: 'المنتج غير موجود | أعشاب MYAH',
+        };
+    }
+
+    const title = `${product.name} | أعشاب MYAH`;
+    const description = (product.description || '').slice(0, 160).replace(/\r?\n|\r/g, ' ');
+    const productUrl = `https://herbsmyah.com/products/${product.slug || product.id}`;
+    const imageUrl = product.image.startsWith('http') ? product.image : `https://herbsmyah.com${product.image}`;
+
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: productUrl,
+        },
+        openGraph: {
+            title,
+            description,
+            url: productUrl,
+            siteName: 'أعشاب MYAH',
+            images: [
+                {
+                    url: imageUrl,
+                    alt: product.name,
+                },
+            ],
+            type: 'website',
+            locale: 'ar_MA',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [imageUrl],
+        },
+    };
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;

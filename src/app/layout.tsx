@@ -14,10 +14,42 @@ const cairo = Cairo({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
+  const siteTitle = settings.metaTitle || "أعشاب MYAH - منتجات طبيعية 100%";
+  const siteDescription = settings.metaDescription || "متجر أعشاب MYAH للعسل الحر والمنتجات الطبيعية والزيوت الأصلية";
+  const ogImage = settings.heroImage || settings.logoUrl || '/images/logo.png';
 
   return {
-    title: settings.metaTitle || "أعشاب MYAH - منتجات طبيعية 100%",
-    description: settings.metaDescription || "متجر أعشاب MYAH للعسل الحر والمنتجات الطبيعية",
+    metadataBase: new URL('https://herbsmyah.com'),
+    title: {
+      default: siteTitle,
+      template: '%s | أعشاب MYAH',
+    },
+    description: siteDescription,
+    alternates: {
+      canonical: 'https://herbsmyah.com',
+    },
+    openGraph: {
+      title: siteTitle,
+      description: siteDescription,
+      url: 'https://herbsmyah.com',
+      siteName: 'أعشاب MYAH',
+      locale: 'ar_MA',
+      type: 'website',
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: 'أعشاب MYAH',
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: siteTitle,
+      description: siteDescription,
+      images: [ogImage],
+    },
     icons: {
       icon: '/images/logo.png',
       shortcut: '/images/logo.png',

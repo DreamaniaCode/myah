@@ -32,7 +32,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
         >
             {product.isNew && <span className={styles.badge}>جديد</span>}
 
-            <Link href={`/products/${product.id}`} className={styles.imageWrapper}>
+            <Link href={`/products/${product.slug || product.id}`} className={styles.imageWrapper}>
                 <Image
                     src={product.image}
                     alt={product.name}
@@ -44,7 +44,7 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
             </Link>
 
             <div className={styles.content}>
-                <Link href={`/products/${product.id}`}>
+                <Link href={`/products/${product.slug || product.id}`}>
                     <h3 className={styles.name}>{product.name}</h3>
                 </Link>
                 <p className={styles.description}>{product.description}</p>

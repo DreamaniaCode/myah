@@ -3,6 +3,22 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 
+import { createSlug, sanitizeSlug } from '@/lib/slugify';
+
+// Helper to ensure unique slug for product
+async function ensureUniqueSlug(desiredSlug: string, currentProductId?: string): Promise<string> {
+    const slug = desiredSlug || `product-${Date.now()}`;
+    let count = 0;
+    while (true) {
+        const candidate = count === 0 ? slug : `${slug}-${count}`;
+        const existing = await prisma.product.findUnique({ where: { slug: candidate } });
+        if (!existing || (currentProductId && existing.id === currentProductId)) {
+            return candidate;
+        }
+        count++;
+    }
+}
+
 // Product Actions
 export async function getProducts() {
     try {
@@ -13,9 +29,14 @@ export async function getProducts() {
     }
 }
 
-export async function getProduct(id: string) {
+export async function getProduct(identifier: string) {
     try {
-        return await prisma.product.findUnique({ where: { id } });
+        // Try finding by slug first, fallback to id
+        let product = await prisma.product.findUnique({ where: { slug: identifier } });
+        if (!product) {
+            product = await prisma.product.findUnique({ where: { id: identifier } });
+        }
+        return product;
     } catch (error) {
         console.error('Error fetching product:', error);
         return null;
@@ -30,15 +51,20 @@ export async function createProduct(formData: FormData) {
     const image = formData.get('image') as string;
     const isNew = formData.get('isNew') === 'on';
 
-    // Parse additional images from comma-separated string
+    const rawSlug = (formData.get('slug') as string) || '';
+    const baseSlug = rawSlug ? sanitizeSlug(rawSlug) : createSlug(name);
+    const slug = await ensureUniqueSlug(baseSlug);
+
+    // Parse additional images from comma-separated string or array
     const imagesStr = formData.get('images') as string;
     const images = imagesStr ? imagesStr.split(',').map(s => s.trim()).filter(Boolean) : [];
 
     await prisma.product.create({
-        data: { name, description, price, category, image, images, isNew },
+        data: { name, slug, description, price, category, image, images, isNew },
     });
 
     revalidatePath('/admin/products');
+    revalidatePath('/products');
     revalidatePath('/');
 }
 
@@ -50,16 +76,23 @@ export async function updateProduct(id: string, formData: FormData) {
     const image = formData.get('image') as string;
     const isNew = formData.get('isNew') === 'on';
 
-    // Parse additional images from comma-separated string
+    const rawSlug = (formData.get('slug') as string) || '';
+    const baseSlug = rawSlug ? sanitizeSlug(rawSlug) : createSlug(name);
+    const slug = await ensureUniqueSlug(baseSlug, id);
+
+    // Parse additional images from comma-separated string or array
     const imagesStr = formData.get('images') as string;
     const images = imagesStr ? imagesStr.split(',').map(s => s.trim()).filter(Boolean) : [];
 
     await prisma.product.update({
         where: { id },
-        data: { name, description, price, category, image, images, isNew },
+        data: { name, slug, description, price, category, image, images, isNew },
     });
 
     revalidatePath('/admin/products');
+    revalidatePath('/products');
+    revalidatePath(`/products/${slug}`);
+    revalidatePath(`/products/${id}`);
     revalidatePath('/');
 }
 

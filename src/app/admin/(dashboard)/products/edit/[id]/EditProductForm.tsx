@@ -4,21 +4,44 @@ import { useState } from 'react';
 import { updateProduct } from '@/app/actions';
 import styles from '../../../styles.module.css';
 import ImageUpload from '@/components/admin/ImageUpload';
+import GalleryUpload from '@/components/admin/GalleryUpload';
+import { createSlug, sanitizeSlug } from '@/lib/slugify';
 import { toast } from 'react-hot-toast';
 import { Product } from '@/types';
 
 export default function EditProductForm({ product }: { product: Product }) {
-    const [imageUrl, setImageUrl] = useState(product.image);
+    const [name, setName] = useState(product.name || '');
+    const [slug, setSlug] = useState(product.slug || createSlug(product.name));
+    const [isCustomSlug, setIsCustomSlug] = useState(Boolean(product.slug));
+    const [imageUrl, setImageUrl] = useState(product.image || '');
+    const [galleryImages, setGalleryImages] = useState<string[]>(product.images || []);
     const handleUpdate = updateProduct.bind(null, product.id);
+
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newName = e.target.value;
+        setName(newName);
+        if (!isCustomSlug) {
+            setSlug(createSlug(newName));
+        }
+    };
+
+    const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setIsCustomSlug(true);
+        setSlug(sanitizeSlug(e.target.value));
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
 
+        // Ensure image, images, slug are sent
+        formData.set('image', imageUrl);
+        formData.set('images', galleryImages.join(','));
+        formData.set('slug', slug || createSlug(name));
+
         try {
             await handleUpdate(formData);
             toast.success('تم تحديث المنتج بنجاح! ✅');
-            // Optional: router.refresh();
         } catch (error) {
             console.error(error);
             toast.error('حدث خطأ أثناء التحديث ❌');
@@ -35,12 +58,28 @@ export default function EditProductForm({ product }: { product: Product }) {
                 <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                     {/* Image Preview Section */}
                     <div style={{ gridColumn: 'span 2' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>صورة المنتج</label>
+                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>صورة المنتج الرئيسية</label>
                         <input type="hidden" name="image" value={imageUrl} />
                         <ImageUpload
                             value={imageUrl}
-                            onChange={(url) => setImageUrl(url)}
+                            onChange={(url) => {
+                                setImageUrl(url);
+                                if (!galleryImages.includes(url)) {
+                                    setGalleryImages([url, ...galleryImages]);
+                                }
+                            }}
                             onRemove={() => setImageUrl('')}
+                        />
+                    </div>
+
+                    {/* Gallery Section */}
+                    <div style={{ gridColumn: 'span 2', padding: '1.25rem', backgroundColor: '#F9FAFB', borderRadius: '8px', border: '1px solid #E5E7EB' }}>
+                        <input type="hidden" name="images" value={galleryImages.join(',')} />
+                        <GalleryUpload
+                            images={galleryImages}
+                            onChange={(imgs) => setGalleryImages(imgs)}
+                            mainImage={imageUrl}
+                            onSetMainImage={(url) => setImageUrl(url)}
                         />
                     </div>
 
@@ -48,10 +87,46 @@ export default function EditProductForm({ product }: { product: Product }) {
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>اسم المنتج</label>
                         <input
                             name="name"
-                            defaultValue={product.name}
+                            value={name}
+                            onChange={handleNameChange}
                             required
                             style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
                         />
+                    </div>
+
+                    <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <label style={{ fontWeight: 600 }}>رابط المنتج المخصص (Slug)</label>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    const generated = createSlug(name);
+                                    setSlug(generated);
+                                    setIsCustomSlug(false);
+                                }}
+                                style={{
+                                    background: 'none',
+                                    border: 'none',
+                                    color: '#059669',
+                                    fontSize: '0.75rem',
+                                    cursor: 'pointer',
+                                    textDecoration: 'underline',
+                                }}
+                            >
+                                توليد تلقائي
+                            </button>
+                        </div>
+                        <input
+                            name="slug"
+                            value={slug}
+                            onChange={handleSlugChange}
+                            placeholder="curcuma-natura"
+                            style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
+                            dir="ltr"
+                        />
+                        <p style={{ fontSize: '0.75rem', color: '#059669', marginTop: '0.25rem', direction: 'ltr', textAlign: 'left' }}>
+                            https://herbsmyah.com/products/{slug || '...'}
+                        </p>
                     </div>
 
                     <div>
@@ -77,18 +152,9 @@ export default function EditProductForm({ product }: { product: Product }) {
                             <option value="honey">عسل</option>
                             <option value="herbs">أعشاب</option>
                             <option value="oils">زيوت</option>
+                            <option value="cosmetics">تجميل</option>
+                            <option value="other">أخرى</option>
                         </select>
-                    </div>
-
-
-                    <div style={{ gridColumn: 'span 2' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>صور إضافية (افصل بين الروابط بفاصلة ,)</label>
-                        <input
-                            name="images"
-                            defaultValue={product.images?.join(', ')}
-                            placeholder="/images/img1.png, /images/img2.png"
-                            style={{ width: '100%', padding: '0.75rem', border: '1px solid #D1D5DB', borderRadius: '6px' }}
-                        />
                     </div>
 
                     <div style={{ gridColumn: 'span 2' }}>

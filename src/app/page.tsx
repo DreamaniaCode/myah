@@ -16,6 +16,7 @@ export default async function Home() {
   const products = prismaProducts.map(p => ({
     id: p.id,
     name: p.name,
+    slug: p.slug ?? undefined,
     description: p.description,
     price: p.price,
     image: p.image,
