@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getSettings } from '@/app/actions/settings';
+import { formatWhatsAppNumber } from '@/lib/whatsapp';
 import styles from './page.module.css';
 
 export const dynamic = 'force-dynamic';
@@ -98,7 +99,7 @@ export default async function AboutPage() {
                         <h2>هل لديك أسئلة؟</h2>
                         <p>نحن هنا لمساعدتك! تواصل معنا عبر واتساب</p>
                         <a
-                            href={`https://wa.me/${settings.contactPhone.replace(/\D/g, '')}`}
+                            href={`https://wa.me/${formatWhatsAppNumber(settings.contactPhone)}`}
                             className={styles.ctaButton}
                             target="_blank"
                             rel="noopener noreferrer"

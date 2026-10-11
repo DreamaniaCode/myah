@@ -1,6 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { getOrders, updateOrderStatus } from '@/app/actions';
 import Link from 'next/link';
+import { formatWhatsAppNumber } from '@/lib/whatsapp';
 import styles from '../styles.module.css';
 
 export default async function AdminOrdersPage() {
@@ -61,7 +62,17 @@ export default async function AdminOrdersPage() {
                                     </td>
                                     <td>
                                         <div style={{ fontWeight: 600 }}>{order.customer}</div>
-                                        <div style={{ fontSize: '0.85rem', color: '#6B7280' }}>{order.phone}</div>
+                                        <div style={{ fontSize: '0.85rem' }}>
+                                            <a
+                                                href={`https://wa.me/${formatWhatsAppNumber(order.phone)}?text=${encodeURIComponent(`السلام عليكم ${order.customer}، نتواصل معكم من أعشاب MYAH بخصوص طلبكم #${order.id.slice(0, 8)}.`)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style={{ color: '#059669', textDecoration: 'none', fontWeight: 600 }}
+                                                title="مراسلة العميل عبر واتساب"
+                                            >
+                                                💬 {order.phone}
+                                            </a>
+                                        </div>
                                         <div style={{ fontSize: '0.8rem', color: '#9CA3AF' }}>{order.address}</div>
                                     </td>
                                     <td>
@@ -94,6 +105,16 @@ export default async function AdminOrdersPage() {
                                     </td>
                                     <td>
                                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                            <a
+                                                href={`https://wa.me/${formatWhatsAppNumber(order.phone)}?text=${encodeURIComponent(`السلام عليكم ${order.customer}، نتواصل معكم من أعشاب MYAH بخصوص طلبكم #${order.id.slice(0, 8)}.`)}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className={styles.btn}
+                                                style={{ fontSize: '0.85rem', padding: '0.5rem 0.75rem', background: '#25D366', color: 'white', textDecoration: 'none' }}
+                                                title="مراسلة عبر واتساب"
+                                            >
+                                                💬 واتساب
+                                            </a>
                                             {order.status === 'pending' && (
                                                 <form action={updateOrderStatus.bind(null, order.id, 'paid')} style={{ display: 'inline' }}>
                                                     <button className={`${styles.btn} ${styles.primary}`} style={{ fontSize: '0.85rem', padding: '0.5rem 0.75rem' }}>

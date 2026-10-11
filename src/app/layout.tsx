@@ -42,7 +42,7 @@ export default async function RootLayout({
       <body className={`${cairo.variable}`} suppressHydrationWarning>
         <CartProvider>
           {children}
-          <WhatsAppButton />
+          <WhatsAppButton phone={settings.contactPhone} />
         </CartProvider>
         <CustomScripts
           headScripts={settings.headScripts}

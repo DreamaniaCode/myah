@@ -1,6 +1,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { getSettings } from '@/app/actions/settings';
+import { formatWhatsAppNumber } from '@/lib/whatsapp';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,7 +89,7 @@ export default async function ContactPage() {
                             أسرع طريقة للحصول على إجابة لاستفسارك
                         </p>
                         <a
-                            href={`https://wa.me/${settings.contactPhone.replace(/\D/g, '')}`}
+                            href={`https://wa.me/${formatWhatsAppNumber(settings.contactPhone)}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{ background: 'white', color: '#25D366', padding: '0.75rem 2rem', borderRadius: '50px', fontWeight: 700, textDecoration: 'none', transition: 'transform 0.2s' }}

@@ -2,16 +2,16 @@
 
 import { useState } from 'react';
 import styles from './WhatsAppButton.module.css';
+import { DEFAULT_MANAGER_WHATSAPP, formatWhatsAppNumber } from '@/lib/whatsapp';
 
-export default function WhatsAppButton() {
+export default function WhatsAppButton({ phone }: { phone?: string }) {
     const [showPopup, setShowPopup] = useState(false);
 
-    // TODO: Replace with actual WhatsApp number
-    const whatsappNumber = '+212676953050'; // Replace with your actual number
+    const whatsappNumber = formatWhatsAppNumber(phone || DEFAULT_MANAGER_WHATSAPP);
     const message = 'السلام عليكم، أحتاج إلى مساعدة بخصوص منتجاتكم';
 
     const handleWhatsAppClick = () => {
-        const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
         setShowPopup(false);
     };

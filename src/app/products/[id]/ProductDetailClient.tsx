@@ -8,6 +8,7 @@ import { Product } from '@/types';
 import ProductCard from '@/components/ProductCard';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import QuickOrderModal from '@/components/QuickOrderModal';
 import styles from './page.module.css';
 
 interface ProductDetailClientProps {
@@ -26,6 +27,7 @@ export default function ProductDetailClient({ product, relatedProducts, settings
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [isAdding, setIsAdding] = useState(false);
+    const [isQuickOrderOpen, setIsQuickOrderOpen] = useState(false);
 
     const handleAddToCart = () => {
         setIsAdding(true);
@@ -36,9 +38,7 @@ export default function ProductDetailClient({ product, relatedProducts, settings
     };
 
     const handleWhatsAppOrder = () => {
-        const message = `مرحباً، أريد طلب:\n${product.name}\nالكمية: ${quantity}\nالسعر: ${product.price * quantity} درهم`;
-        const whatsappUrl = `https://wa.me/212676953050?text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
+        setIsQuickOrderOpen(true);
     };
 
     return (
@@ -138,6 +138,14 @@ export default function ProductDetailClient({ product, relatedProducts, settings
                     )}
                 </div>
             </div>
+
+            <QuickOrderModal
+                isOpen={isQuickOrderOpen}
+                onClose={() => setIsQuickOrderOpen(false)}
+                product={product}
+                quantity={quantity}
+                managerPhone={settings.contactPhone}
+            />
 
             <Footer
                 siteName={settings.siteName}

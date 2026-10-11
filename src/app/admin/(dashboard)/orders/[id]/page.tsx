@@ -1,4 +1,6 @@
 import { getOrder, updateOrderStatus, updateOrderDetails } from '@/app/actions';
+import { getSettings } from '@/app/actions/settings';
+import { formatWhatsAppNumber } from '@/lib/whatsapp';
 export const dynamic = 'force-dynamic';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -6,19 +8,12 @@ import styles from '../../styles.module.css';
 import InvoiceDownload from '@/components/InvoiceDownload';
 import TrackingDownload from '@/components/TrackingDownload';
 
-// Mock settings for invoice - ideally fetch these
-const invoiceSettings = {
-    siteName: 'أعشاب MYAH',
-    contactAddress: 'الدار البيضاء، المغرب',
-    contactEmail: 'info@herbsmyah.com',
-    bankName: 'CIH Bank',
-    bankAccount: '1234567890123456',
-    cashPlusInfo: 'اسم المستفيد: محمد فلان | رقم الهاتف: 0600000000'
-};
-
 export default async function OrderDetailsPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const order = await getOrder(id);
+    const [order, settings] = await Promise.all([
+        getOrder(id),
+        getSettings()
+    ]);
 
     if (!order) {
         notFound();
@@ -58,7 +53,28 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                             <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>معلومات العميل</h2>
                             <div style={{ background: '#F9FAFB', padding: '1.5rem', borderRadius: '8px' }}>
                                 <div style={{ marginBottom: '0.5rem' }}><strong>الاسم:</strong> {order.customer}</div>
-                                <div style={{ marginBottom: '0.5rem' }}><strong>الهاتف:</strong> {order.phone}</div>
+                                <div style={{ marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                                    <div><strong>الهاتف:</strong> {order.phone}</div>
+                                    <a
+                                        href={`https://wa.me/${formatWhatsAppNumber(order.phone)}?text=${encodeURIComponent(`السلام عليكم ${order.customer}، نتواصل معكم من أعشاب MYAH بخصوص طلبكم #${order.id.slice(0, 8)}.`)}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            background: '#25D366',
+                                            color: 'white',
+                                            padding: '0.3rem 0.8rem',
+                                            borderRadius: '50px',
+                                            fontSize: '0.85rem',
+                                            fontWeight: 600,
+                                            textDecoration: 'none',
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            gap: '0.35rem'
+                                        }}
+                                    >
+                                        💬 مراسلة عبر واتساب
+                                    </a>
+                                </div>
                                 <div><strong>العنوان:</strong> {order.address}</div>
                             </div>
                         </div>
@@ -158,7 +174,7 @@ export default async function OrderDetailsPage({ params }: { params: Promise<{ i
                         <div style={{ background: 'white', padding: '1.5rem', borderRadius: '8px', border: '1px solid #E5E7EB' }}>
                             <h3 style={{ fontSize: '1.1rem', marginBottom: '1rem' }}>المستندات</h3>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <InvoiceDownload order={order} settings={invoiceSettings} />
+                                <InvoiceDownload order={order} settings={settings} />
 
                                 {order.trackingCode && (
                                     <TrackingDownload order={order} trackingCode={order.trackingCode} />
